@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주간 모니터링 — 2026-06-05</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F4F6F9; --surface: #FFFFFF; --border: #E4E7EC;
+      --text-primary: #111827; --text-secondary: #4B5563; --text-muted: #9CA3AF;
+      --sidebar-w: 200px; --header-h: 64px; --radius: 12px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif; background: var(--bg); color: var(--text-primary); font-size: 13px; line-height: 1.6; }
+    a { color: inherit; text-decoration: none; }
+
+    .site-header { position: sticky; top: 0; z-index: 100; background: var(--surface); border-bottom: 1px solid var(--border); height: var(--header-h); display: flex; align-items: center; padding: 0 28px; gap: 14px; }
+    .header-logo { font-weight: 800; font-size: 15px; letter-spacing: -.4px; }
+    .header-sep { color: var(--border); }
+    .header-sub { font-size: 13px; color: var(--text-secondary); }
+    .header-period { margin-left: auto; font-size: 12px; color: var(--text-secondary); background: var(--bg); padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border); }
+
+    .layout { display: flex; max-width: 1360px; margin: 0 auto; padding: 0 20px; gap: 24px; }
+    .sidebar { flex-shrink: 0; width: var(--sidebar-w); }
+    .sidebar-inner { position: sticky; top: calc(var(--header-h) + 20px); padding: 20px 0; }
+    .sidebar-heading { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); padding: 0 10px 10px; }
+    .nav-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px; color: var(--text-secondary); font-size: 12px; transition: background .12s; }
+    .nav-item:hover, .nav-item.active { background: var(--bg); color: var(--text-primary); font-weight: 600; }
+    .nav-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .nav-label { flex: 1; }
+    .nav-count { font-size: 11px; font-weight: 700; }
+
+    .main-content { flex: 1; min-width: 0; padding: 24px 0 60px; }
+
+    .report-header { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 28px; margin-bottom: 20px; }
+    .report-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+    .report-title { font-size: 22px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 12px; }
+    .report-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+    .badge { font-size: 12px; padding: 3px 10px; border-radius: 4px; font-weight: 600; }
+    .badge-period { background: #EEF2FF; color: #4338CA; }
+    .badge-stat { background: #F1F5F9; color: #475569; }
+    .report-collected { font-size: 11px; color: var(--text-muted); }
+
+    /* 기관 카드 그리드 */
+    .cards-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; margin-bottom: 16px; }
+    .grid-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
+    .grid-card { background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--card-color,#4F86F7); border-radius: var(--radius); display: flex; flex-direction: column; min-height: 300px; overflow: hidden; }
+
+    /* 풀너비 섹션 (업계뉴스, 주요인사) */
+    .full-section { background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--card-color,#0EA5E9); border-radius: var(--radius); margin-bottom: 16px; overflow: hidden; }
+    .full-section-header { padding: 16px 20px 0; border-bottom: 1px solid var(--border); }
+    .full-section-body { padding: 0 20px 8px; }
+
+    /* 업계뉴스: 2컬럼 */
+    .news-columns { columns: 2; column-gap: 28px; padding-top: 4px; }
+    .news-columns .news-item { break-inside: avoid; }
+
+    /* 카드 공통 */
+    .card-header { padding: 16px 20px 0; border-bottom: 1px solid var(--border); }
+    .card-title-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .card-emoji { font-size: 18px; }
+    .card-title { font-size: 15px; font-weight: 700; letter-spacing: -.3px; flex: 1; }
+    .card-badge { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
+    .tabs-bar { display: flex; gap: 2px; margin: 0 -20px; padding: 0 20px; }
+    .tab-btn { font-size: 12px; font-weight: 600; padding: 7px 12px; border: none; background: none; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; white-space: nowrap; }
+    .tab-btn:hover { color: var(--text-primary); }
+    .tab-btn.active { color: var(--card-color,#4F86F7); border-bottom-color: var(--card-color,#4F86F7); }
+    .card-body { padding: 0 20px; flex: 1; overflow-y: auto; max-height: 420px; }
+    .tab-pane { display: none; padding: 4px 0; }
+    .tab-pane.active { display: block; }
+
+    /* 아이템 */
+    .news-item { padding: 11px 0; border-bottom: 1px solid var(--border); }
+    .news-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .item-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+    .item-date { font-size: 11px; font-weight: 700; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+    .item-source { font-size: 10px; color: var(--text-muted); background: var(--bg); padding: 1px 5px; border-radius: 3px; border: 1px solid var(--border); }
+    .item-title { display: block; font-size: 13px; font-weight: 600; color: var(--text-primary); line-height: 1.4; margin-bottom: 3px; }
+    .item-title:hover { color: #4338CA; text-decoration: underline; }
+    .item-desc { font-size: 11px; color: var(--text-secondary); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+    .bill-status { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; }
+    .status-pending { background: #FFF7ED; color: #C2410C; }
+    .status-passed  { background: #F0FDF4; color: #15803D; }
+    .status-rejected { background: #FEF2F2; color: #DC2626; }
+
+    .meeting-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+    .meeting-row:last-child { border-bottom: none; }
+    .meeting-name { font-size: 13px; font-weight: 500; }
+
+    .person-cnt { font-size: 10px; font-weight: 700; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 1px 5px; margin-left: 2px; color: var(--text-muted); }
+
+    .empty-state { padding: 36px 0; text-align: center; color: var(--text-muted); font-size: 13px; }
+
+    @media (max-width: 900px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .grid-card:last-child:nth-child(odd) { grid-column: auto; }
+      .news-columns { columns: 1; }
+      .sidebar { display: none; }
+    }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-logo">📊 대외협력팀</div>
+  <span class="header-sep">|</span>
+  <span class="header-sub">주간 모니터링</span>
+  <span class="header-period">2026년 06월 05일(Fri) ~ 06월 11일(Thu)</span>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+      <div class="sidebar-heading">목차</div>
+      <nav class="sidebar-nav"><a class="nav-item" href="#section-cheongwadae">
+        <span class="nav-dot" style="background:#E85D5D;"></span>
+        <span class="nav-label">청와대·대통령실</span>
+        <span class="nav-count" style="color:#E85D5D;">59</span>
+      </a><a class="nav-item" href="#section-grac">
+        <span class="nav-dot" style="background:#2BAE66;"></span>
+        <span class="nav-label">게임물관리위원회</span>
+        <span class="nav-count" style="color:#2BAE66;">14</span>
+      </a><a class="nav-item" href="#section-mcst">
+        <span class="nav-dot" style="background:#7C5CBF;"></span>
+        <span class="nav-label">문화체육관광부</span>
+        <span class="nav-count" style="color:#7C5CBF;">41</span>
+      </a><a class="nav-item" href="#section-ftc">
+        <span class="nav-dot" style="background:#F5A623;"></span>
+        <span class="nav-label">공정거래위원회</span>
+        <span class="nav-count" style="color:#F5A623;">23</span>
+      </a><a class="nav-item" href="#section-assembly">
+        <span class="nav-dot" style="background:#4F86F7;"></span>
+        <span class="nav-label">문화체육관광위원회</span>
+        <span class="nav-count" style="color:#4F86F7;">25</span>
+      </a><a class="nav-item" href="#section-industry">
+        <span class="nav-dot" style="background:#0EA5E9;"></span>
+        <span class="nav-label">업계 뉴스</span>
+        <span class="nav-count" style="color:#0EA5E9;">146</span>
+      </a><a class="nav-item" href="#section-persons">
+        <span class="nav-dot" style="background:#8B5CF6;"></span>
+        <span class="nav-label">주요인사 동향</span>
+        <span class="nav-count" style="color:#8B5CF6;">10</span>
+      </a></nav>
+    </div>
+  </aside>
+  <main class="main-content">
+
+    <div class="report-header">
+      <div class="report-eyebrow">2026년 제23주</div>
+      <h1 class="report-title">문화체육관광위원회 주간 보고</h1>
+      <div class="report-badges">
+        <span class="badge badge-period">2026년 06월 05일(Fri) ~ 06월 11일(Thu)</span>
+        <span class="badge badge-stat">기관뉴스 162건</span>
+        <span class="badge badge-stat">법안 0건</span>
+        <span class="badge badge-stat">회의 0건</span>
+        <span class="badge badge-stat">업계뉴스 146건</span>
+        <span class="badge badge-stat">인사동향 10건</span>
+      </div>
+      <div class="report-collected">수집 시각: 2026-06-09T16:18:38.721393+09:00</div>
+    </div>
+
+    <div class="cards-grid"><div class="grid-card" id="section-cheongwadae" style="--card-color:#E85D5D;">
+    <div class="card-header">
+      <div class="card-title-row">
+        <span class="card-emoji">🏯</span>
+        <h2 class="card-title">청와대·대통령실</h2>
+        <span class="card-badge" style="background:#E85D5D18;color:#E85D5D;border:1px solid #E85D5D40;">59건</span>
+      </div>
+      <div class="tabs-bar"><button class="tab-btn active" onclick="switchTab(this,'cheongwadae-news')">보도 59</button></div>
+    </div>
+    <div class="card-body"><div class="tab-pane active" id="cheongwadae-news"><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">goodmorningcc.com</span></div>
+      <a class="item-title" href="https://www.goodmorningcc.com/news/articleView.html?idxno=447292" target="_blank" rel="noopener">조상호 세종시장 당선인, 전문가 20명 인수위 꾸려 준비 돌입</a>
+      <p class="item-desc">7개 분과·3개 T/F 체제…시정 전반 정책 점검 나서 행정수도 완성·재정안정화·상권활성화 핵심 현안 집중... 문화체육관광분과는 안경주 전 대통령 직속 국가균형발전위원회 위촉위원이 분과장을, 도시주택환경분과는...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">fnnews.com</span></div>
+      <a class="item-title" href="http://www.fnnews.com/news/202606091602581257" target="_blank" rel="noopener">고의숙 제주교육준비위 공식 출범… "40일간 교육 대통합 설계"</a>
+      <p class="item-desc">위원은 강보배 대통령직속 지방시대위원회 지역청년활동특별위원회 위원이다. 정책기획분과는... 위원은 강선보 전 제주시 문화관광체육국장이다. 청렴하고 공정한 교육행정 시스템을 회복하기 위한 계획을 검토하고...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">breaknews.com</span></div>
+      <a class="item-title" href="http://www.breaknews.com/1212964" target="_blank" rel="noopener">국민의힘 41.1%를 지키려면...“국민정당으로 다시 태어나야!”</a>
+      <p class="item-desc">당의 철학과 조직, 인재와 정책이 축적되기 전에 한 사람의 인기와 팬덤에... 대통령을 만들고도 대통령을 제대로 견제하지 못했고, 위기가 오면 방어도 못했으며...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">sjsori.com</span></div>
+      <a class="item-title" href="https://www.sjsori.com/news/articleView.html?idxno=86488" target="_blank" rel="noopener">박성수, 조상호 세종시장직 인수위 총괄 부위원장</a>
+      <p class="item-desc">대한 정책 점검과 공약 실행 방안을 마련하는 활동을 6월 말까지 벌인다. 또 ▲행정수도 ▲재정안정화... 문화체육관광 분과는 안경주 전 대통령직속 국가균형발전위원회 위촉위원이 분과장을 맡고, 임재일 전 공주대학교...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">discoverynews.kr</span></div>
+      <a class="item-title" href="https://www.discoverynews.kr/news/articleView.html?idxno=1093021" target="_blank" rel="noopener">하남 민주평통 2분기 정기회의 개최…통일 공감 확산 방안 점검</a>
+      <p class="item-desc">정책에 대한 지역사회 의견을 수렴하는 한편 하반기 추진 예정인 시민 참여형 통일 공감 사업과 평화문화... 민주평화통일자문회의는 평화통일 정책 수립과 추진 과정에서 국민 의견을 수렴하는 대통령 직속 헌법기관이다....</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">news1.kr</span></div>
+      <a class="item-title" href="https://www.news1.kr/politics/general-politics/6192102" target="_blank" rel="noopener">[인터뷰 전문] 2030 보수화? 30대 정치인들 "분석하려 하지마"</a>
+      <p class="item-desc">확장 정책을 내세웠어야 되는데 그런 것도 명확하지 않았고 오히려 마치 대통령의 국정 지지율 이꼴 자신의... 방금 뭐 커뮤니티나 이런 인터넷 익명 사이트도 말씀을 하셨지만 그건 저는 40대 문화라고 봅니다. 지금 10대나...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">경향신문</span></div>
+      <a class="item-title" href="https://www.khan.co.kr/article/202606091536011" target="_blank" rel="noopener">오늘의 부고-한오섭 전 대통령실 정무수석 부친상 외</a>
+      <p class="item-desc">■한상태씨 별세, 오섭 전 대통령실 정무수석 부친상=8일 서울성모병원. 발인 11일 (02)2258-5940 ■맹명옥씨 별세, 김현곤 열린연세정형외과 원장 모친상, 전형주 군포문화재단 대표이사 시모상=8일...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">joongboo.com</span></div>
+      <a class="item-title" href="https://www.joongboo.com/news/articleView.html?idxno=363728293" target="_blank" rel="noopener">유진이 평택대 명예교수, 청소년 육성·보호 유공 국민포장 수훈</a>
+      <p class="item-desc">유 명예교수는 청소년지도자 전문인력 양성, 다문화 청소년 지원 체계 구축, 청소년 정책 발전과 친화형 환경 조성에 헌신한 공로를 인정받았다. 이동현 평택대학교 총장(왼쪽)이 유진이 명예교수에게 이재명 대통령을...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">뉴시스</span></div>
+      <a class="item-title" href="https://www.newsis.com/view/NISX20260609_0003662422" target="_blank" rel="noopener">'정부 혁신 차관급 기관 1위' 산림청, 대통령 표창 수상</a>
+      <p class="item-desc">9일 산림청은 행정안전부가 개최한 중앙·지방 정부혁신평가 시상식에서 대통령 표창을 수상했다고 밝혔다. 산림청은 국민소통 정책화, 조직문화 개선 및 행정 내부 효율화 부문에서 최고의 평가를 평가를 받으며 차관급...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">조선일보</span></div>
+      <a class="item-title" href="https://news.tvchosun.com/site/data/html_dir/2026/06/09/2026060990230.html" target="_blank" rel="noopener">"오빠 사랑해"…콜롬비아 대선에 'K컬처' 등장, 무슨 일?</a>
+      <p class="item-desc">콜롬비아 대통령 선거 결선투표를 앞두고 핵심 전략으로 한국의 문화 콘텐츠, 'K컬처'가 등장해 관심이... 후보의 정책을 홍보하는 숏폼 영상을 제작하기도 한다. 콜롬비아를 비롯한 남미 지역에서 K컬처의 인기는...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">viva100.com</span></div>
+      <a class="item-title" href="https://www.viva100.com/article/20260609500855" target="_blank" rel="noopener">[부고] 전형주(군포문화재단 대표)씨 시모상 외</a>
+      <p class="item-desc">(군포문화재단 대표이사)씨 시모상 = 8일, 연세대 신촌장례식장 특2호실, 발인 11일 오전 6시30분(02-2227-7500). ▲한상태씨 별세, 이애자씨 남편상, 한오섭(전 대통령실 정무수석)씨 부친상 = 8일 오후 5시30분...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">weekly.hankooki.com</span></div>
+      <a class="item-title" href="https://weekly.hankooki.com/news/articleView.html?idxno=7168432" target="_blank" rel="noopener">DNA까지 싹 바꿔…삼성그룹, 이재용식 AI 대전환 프로젝트 시동</a>
+      <p class="item-desc">이재명 대통령과 젠슨 황 엔비디아 최고경영자(CEO)의 대담에 참석해 이야기하고 있다. 사진=연합뉴스  삼성그룹이 전사 모든 업무에 인공지능(AI)을 도입한다. 이재용 회장의 진두지휘 아래 일하는 방식과 조직문화를...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">thepublic.kr</span></div>
+      <a class="item-title" href="https://www.thepublic.kr/news/articleView.html?idxno=307003" target="_blank" rel="noopener">김성회 전 비서관 "장동혁 흔들면 2030 지지층 이탈" 長옹호</a>
+      <p class="item-desc">김성회 전 대통령실 종교다문화비서관이 9일 국민의힘 내부에서 제기되는 장동혁 대표 책임론을 비판하며 당내 중진들과 친한(친한동훈)계 인사들을 향해 경고성 메시지를 내놨다. 김 전 비서관은 이날 페이스북에 올린...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">머니투데이</span></div>
+      <a class="item-title" href="https://www.mt.co.kr/policy/2026/06/09/2026060914443954175" target="_blank" rel="noopener">산림청, 정부혁신평가 '대통령 표창'…차관급 기관 중 1위</a>
+      <p class="item-desc">산림청은 9일 행정안전부가 개최한 중앙·지방 정부혁신평가 시상식에서 '국민소통 정책화', '조직문화 개선 및 행정 내부 효율화' 등에 대한 우수한 평가를 받으며 '대통령 표창'을 수상했다고 9일 밝혔다. 차관급...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">view.asiae.co.kr</span></div>
+      <a class="item-title" href="https://view.asiae.co.kr/article/2026060915033882142" target="_blank" rel="noopener">산림청, 국민 소통·조직 문화 개선 우수 '대통령 표창' 수상</a>
+      <p class="item-desc">산림청은 행정안전부의 중앙·지방 정부혁신평가 시상식에서 대통령 표창을 받았다고 9일 밝혔다. 평가에서 산림청은 국민 소통 정책화와 조직문화 개선 및 행정 내부 효율화 부문에서 높은 점수를 받았다. 특히 기존...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">hidomin.com</span></div>
+      <a class="item-title" href="https://www.hidomin.com/news/articleView.html?idxno=708574" target="_blank" rel="noopener">이 대통령 공공기관 이전 "분산 보다 집중"…경북도 적극 대응 나서</a>
+      <p class="item-desc">이재명 대통령이 취임 1주년 기자회견을 통해 2차 공공기관 이전 시 '분산 보다 집중'방침을 밝힌 가운데... 추진 상황 보고를 맡은 지방시대정책과장은"선택과 집중을 통해 40여 개의 대상 기관을 '전략 유치군'으로...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">industrynews.co.kr</span></div>
+      <a class="item-title" href="https://www.industrynews.co.kr/news/articleView.html?idxno=81949" target="_blank" rel="noopener">김정은-시진핑 정상, 평양서 결속 강화…동북아 신냉전 구도 고착화</a>
+      <p class="item-desc">정치·경제·문화 등 각 분야의 교류와 협력을 확대해 '조중(북중) 관계 발전의 새로운 장'을 열기로... 중국 관점에서도 지난달 블라디미르 푸틴 러시아 대통령의 베이징 방문에 이어 북한과의 결속까지 공고히 함으로써...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">segye.com</span></div>
+      <a class="item-title" href="https://www.segye.com/newsView/20260609508720?OutUrl=naver" target="_blank" rel="noopener">‘오빠’·‘사랑해’…K팝, 콜롬비아 대선에 등장</a>
+      <p class="item-desc">K-팝 문화가 바다 건너 중남미 콜롬비아 대통령 선거에서 핵심 홍보 전략으로 등장해 화제가 되고 있다. 9일... 무상교육 정책을 홍보하는 숏폼 영상을 제작하는 등 입소문을 주도하고 있다. 이는 인공지능(AI) 영상과...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">joongangenews.com</span></div>
+      <a class="item-title" href="https://www.joongangenews.com/news/articleView.html?idxno=524700" target="_blank" rel="noopener">"참정권은 민주주의 근간"...金총리, 청년 정책·선거제도 개선 강조</a>
+      <p class="item-desc">공연문화와 관광 역량을 세계에 보여주는 자리"라며 "관계 부처와 지방자치단체가 협력해 인파 관리를 철저히 하고 숙박 바가지요금과 암표 거래 등 불법 행위를 예방해야 한다"고 말했다. 또 이재명 대통령의 유럽 순방...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">sisunnews.co.kr</span></div>
+      <a class="item-title" href="http://www.sisunnews.co.kr/news/articleView.html?idxno=240167" target="_blank" rel="noopener">[이슈체크] 6·3지방선거 '투표용지 부족' 사태...선관위, 헌정 사상 첫...</a>
+      <p class="item-desc">선거정책실장과 선거1국장을 즉각 직위해제 조치했다. #사흘만에 불어난 통계...불신·공분 키워 그러나... #李 "주권행사 못한 건 심각한 문제"...부정선거엔 선그어 이재명 대통령은 지난 8일 취임 1주년 기자회견에서...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">sommeliertimes.com</span></div>
+      <a class="item-title" href="https://www.sommeliertimes.com/news/articleView.html?idxno=131214" target="_blank" rel="noopener">[이대형의 우리술 이야기] 주류 라벨 경고 표시, 전통주만의 문제가 아...</a>
+      <p class="item-desc">국민에게 경각심을 주고 책임 있는 음주 문화를 만들기 위한 노력 역시 필요하다. 그러나 좋은 취지의 정책이... ' 23년 인사혁신처 대한민국 공무원상 대통령 표창, 15년 전통주 연구로 미래창조과학부 과학기술 진흥...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">kpinews.kr</span></div>
+      <a class="item-title" href="https://www.kpinews.kr/newsView/1065590078776859" target="_blank" rel="noopener">[차현진의 금융학교] 한국은행 생일찾기가 한국금융 과거사 청산인 이유</a>
+      <p class="item-desc">경제정책 전반에 개입했다. 미국의 요구사항 중 하나는 현대적 중앙은행 설립도 있었다. 일본에 대해... 이승만 대통령은 미국의 의도를 잘 알았다. 하지만 현대적 중앙은행 설립에는 흔쾌히 동의했다. 이승만 대통령의...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">뉴시스</span></div>
+      <a class="item-title" href="https://www.newsis.com/view/NISX20260608_0003661185" target="_blank" rel="noopener">[일지]종합특검 출범부터 김대기 등 첫 기소까지</a>
+      <p class="item-desc">관련 -특검, '대통령실 수원지검 수사 개입 의혹' 이첩 요청 ▲4월 6일 -특검, '관저 이전 의혹' 패션문화업체 압수수색…김 여사에 디올 의류 등 명품 제공 ▲4월 10일 -특검, 대검찰청·심우정 전 검찰총장 PC 압수수색...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">jejudomin.co.kr</span></div>
+      <a class="item-title" href="https://www.jejudomin.co.kr/news/articleView.html?idxno=319800" target="_blank" rel="noopener">고의숙 인수위 출범…40일간 제주교육 공약 설계</a>
+      <p class="item-desc">정책기획분과는 강은주 동광초 교감이 분과장을, 강보배 대통령직속 지방시대위원회... 청렴행정분과는 변숙희 전 제주교육박물관장을 분과장으로, 강선보 전 제주시 문화관광체육국장을 위원으로 구성해 청렴하고...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">ajunews.com</span></div>
+      <a class="item-title" href="https://www.ajunews.com/view/20260609130317892" target="_blank" rel="noopener"><오늘의 부고></a>
+      <p class="item-desc">(군포문화재단 대표이사) 시모상=8일, 연세대 신촌세브란스병원 장례식장 특2호실, 발인 11일 오전 6시 30분. ☎ 02-2227-7500 ▲한상태씨 별세, 이애자씨 배우자상, 한오섭씨(전 대통령실 정무수석) 부친상=8일...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">munhwa.com</span></div>
+      <a class="item-title" href="https://www.munhwa.com/article/11594264?ref=naver" target="_blank" rel="noopener">종합특검, 윤정부 ‘관저이전 의혹’ 정조준… 김대기·이상민 등 무더...</a>
+      <p class="item-desc">등 대통령실 핵심 인사와 이상민 전 행정안전부 장관을 9일 무더기 기소한다. 출범 104일 만의 첫 기소로 정점인 윤석열 전 대통령 부부를 향한 수사에 속도가 붙을 전망이다. 문화일보 취재를 종합하면 종합특검은 오는...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">asiatime.co.kr</span></div>
+      <a class="item-title" href="https://www.asiatime.co.kr/article/20260609500186" target="_blank" rel="noopener">李대통령, 취임 첫 유럽 순방…'외교 다변화' 시동</a>
+      <p class="item-desc">대통령실은 이를 'G7 플러스 글로벌 책임강국'으로서 한국의 위상을 공고히 하는 계기로 보고 있다. 이... 이탈리아 국빈 방문에서는 첨단산업과 문화협력 확대를 꾀한다. 이 대통령은 세르지오 마타렐라 대통령과 조르자...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">ibabynews.com</span></div>
+      <a class="item-title" href="https://www.ibabynews.com/news/articleView.html?idxno=151926" target="_blank" rel="noopener">이재명 대통령 "저출생 해법은 희망있는 사회 만드는 것"</a>
+      <p class="item-desc">ⓒ대통령실 이재명 대통령이 저출생 고령화 문제를 해결하기 위해 "희망을 만드는 것이 제일 큰 대책"이라고... 문화가 바뀌고 있는 것"이라고 설명했다. 이어 "20~30년 동안 아이 안 낳고 40~50대 된 사람들이 살아 보니까...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">view.asiae.co.kr</span></div>
+      <a class="item-title" href="https://view.asiae.co.kr/article/2026060820524649674" target="_blank" rel="noopener">한총리 지명 후속 인선 주목…집권 2년 차 개각 시동</a>
+      <p class="item-desc">이재명 대통령이 한성숙 중소벤처기업부 장관을 국무총리 후보자로 지명하면서 집권 2년 차 내각과 청와대... 중기부 장관 인선과 함께 국토교통부와 보건복지부, 문화체육관광부, 교육부 등이 함께 오르내린다. 국토부는...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">ichannela.com</span></div>
+      <a class="item-title" href="https://www.ichannela.com/news/main/news_detailPage.do?publishId=000000533482" target="_blank" rel="noopener">인터뷰 전문: 성치훈 “선관위 독립성 방패 너무 인정, 해체에 가까운 ...</a>
+      <p class="item-desc">동의하실지 모르겠지만 스타벅스 마케팅과 관련해서 저는 문화적 감성, 여성분들이 내 커피를 내가 눈치... 관련해서 대통령실의 요구는 나왔다. 지금 야당이랑 막 치고받고 무조건 창 들고 싸울 사람이 아니라 야당한테...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">eroun.net</span></div>
+      <a class="item-title" href="https://www.eroun.net/news/articleView.html?idxno=82671" target="_blank" rel="noopener">[이로운주목]정부 "문화강국 토대 구축"...문화연대 "문화정책 대전환 ...</a>
+      <p class="item-desc">문화체육관광부는 콘텐츠 수출과 관광, 문화향유 확대 등을 중심으로 '문화강국 토대 구축' 성과를 제시한... 문화정책 평가도 함께 제기되고 있다. 'K-이니셔티브' 제시한 이재명 대통령 이재명 대통령은 8일 청와대...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">newsian.co.kr</span></div>
+      <a class="item-title" href="http://www.newsian.co.kr/news/articleView.html?idxno=90670" target="_blank" rel="noopener">李대통령, 오늘 유럽 순방길…G7 무대서 '실용외교' 시험대 오른다</a>
+      <p class="item-desc">이 대통령은 세르지오 마타렐라 대통령, 조르자 멜로니 총리와 잇따라 정상회담을 갖고 경제·문화·방산... 다만 대통령실은 현재까지 구체적으로 확정된 일정은 없다는 입장을 유지하고 있다. 외교가에서는 이번 순방이...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">pharmnews.com</span></div>
+      <a class="item-title" href="https://www.pharmnews.com/news/articleView.html?idxno=304050" target="_blank" rel="noopener">홍승권 심평원장, '안전 경영' 강화...노사 공동 선포식 개최</a>
+      <p class="item-desc">대통령실은 모든 정책의 출발점을 국민 생명과 안전에 두고 공직사회 전반의 인식과 행동 전환을 요구한다는... 안전문화로 자리 잡을 수 있다"고 말했다. 개정된 안전보건경영방침은 노사 공동 참여와 합의를 기반으로...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">kwangju.co.kr</span></div>
+      <a class="item-title" href="http://www.kwangju.co.kr/article.php?aid=1780920000799927277" target="_blank" rel="noopener">통합시 살 길은 경제·일자리…미래 먹거리 직접 챙긴다</a>
+      <p class="item-desc">민형배 당선인의 인수위인 ‘전남광주대전환기획위원회’는 8일 오전 나주 빛가람복합문화체육센터에서... 이 대통령은 이날 청와대 영빈관에서 열린 취임 1주년 기자회견에서 “조만간 ‘성장 전략의 대전환’을 이뤄낼...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">segye.com</span></div>
+      <a class="item-title" href="https://www.segye.com/newsView/20260608516201?OutUrl=naver" target="_blank" rel="noopener">“2년차 국정 전력 질주… 신임 총리 한성숙 적격 판단” [李 취임 1년 ...</a>
+      <p class="item-desc">정치권에서는 총리 후보자 지명으로 공석이 생겨난 중기부를 비롯해 국토교통부, 교육부, 문화체육관광부, 보건복지부 등이 개각 우선순위에 올랐다는 분석이 나온다. 이재명 대통령이 8일 청와대 영빈관에서 열린 취임...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">ajunews.com</span></div>
+      <a class="item-title" href="https://www.ajunews.com/view/20260608165426882" target="_blank" rel="noopener">[이재명 정부 1년, 교육정책 진단] 닫혀버린 '백년대계'…취임 1년 기자...</a>
+      <p class="item-desc">이덕난 국회입법조사처 교육문화 팀장은 본지와의 인터뷰에서 이재명 정부 2년 차가 마주한 초중등 교육의... 총리실이나 대통령실 직속의 강력한 컨트롤타워가 중심추 역할을 해야 한다"고 강조했다. 거점 국립대학에...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">womaneconomy.co.kr</span></div>
+      <a class="item-title" href="https://www.womaneconomy.co.kr/news/articleView.html?idxno=254830" target="_blank" rel="noopener">20년만에 여성 총리 지명···'재산 1위' 한성숙 국회 문턱 넘을까</a>
+      <p class="item-desc">세간의 시선은 최휘영 문화체육관광부 장관(전 NHN 국내담당 총괄 대표이사), 하정우 전 대통령실 AI미래기획수석비서관에 이어 총리 후보자까지 네이버 출신이 중용된 흐름에 주목하고 있다. 정부가 국가 핵심 전략으로...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">newstomato.com</span></div>
+      <a class="item-title" href="http://www.newstomato.com/ReadNews.aspx?no=1303347&inflow=N" target="_blank" rel="noopener">질답만 21개에 167분 회견…집권 2년차도 '찐소통'</a>
+      <p class="item-desc">회견은 민생경제, 외교·안보·국방, 사회·문화 등 총 3개 분야에서 이뤄졌습니다. 이 대통령과 강유정 대통령실 대변인이 즉석에서 기자들을 지목해 질문에 답하는 방식이었습니다. 사전에 입맞춤 없이 즉문즉답으로...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">newswhoplus.com</span></div>
+      <a class="item-title" href="https://www.newswhoplus.com/news/articleView.html?idxno=61822" target="_blank" rel="noopener">[기자수첩] 총리의 자격... 인사청문회 앞둔 쟁점과 검증 과제</a>
+      <p class="item-desc">이재명 정부 출범 이후 네이버 출신 인사들이 대통령실과 정부 요직에 잇따라 기용됐다. 하정우 AI 수석, 최휘영 문화체육관광부 장관 후보자, 한성숙 중소벤처기업부 장관에 이어 이제 총리 지명자 역시 네이버 출신이다....</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">biz.newdaily.co.kr</span></div>
+      <a class="item-title" href="https://biz.newdaily.co.kr/site/data/html/2026/06/08/2026060800180.html" target="_blank" rel="noopener">중기부 한성숙 장관 후임은 누구? … 李대통령 신임받는 하정우 전 AI 수...</a>
+      <p class="item-desc">일각에서는 하정우 전(前) 대통령실 AI 미래기획수석의 재발탁 가능성을 거론하고 있다. 8일 업계에 따르면... 하지만 이 대통령이 한 장관을 비롯해 최휘영 문화관광체육부 장관, 하정우 전 수석 등 네이버 출신을 발탁해온...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">조선일보</span></div>
+      <a class="item-title" href="https://biz.chosun.com/it-science/ict/2026/06/08/M4I5LUFOYJBWTLSBSZ7NETYSEE/?utm_source=naver&utm_medium=original&utm_campaign=biz" target="_blank" rel="noopener">총리 후보 배출하고 젠슨 황 직접 찾아와… 겹경사로 존재감 높아진 네...</a>
+      <p class="item-desc">한 장관이 현 정부의 두 번째 국무총리 후보자로 지명된 데 이어 최휘영 문화체육관광부 장관 역시 NHN(옛 네이버) 대표 출신이다. 지난 4월 물러난 하정우 전 청와대 AI미래기획수석 역시 네이버 출신이다. AI와 디지털...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">dongponews.net</span></div>
+      <a class="item-title" href="https://www.dongponews.net/news/articleView.html?idxno=58572" target="_blank" rel="noopener">"재외공관은 왕이 아니라 국민을 위한 공복"</a>
+      <p class="item-desc">특수동포 ▲동포정책·제도 ▲경제 ▲문화체육 ▲생활안전 등으로 확대됐다. 그 결과 전 세계 동포민원... 최근 청와대 국무회의에서도 이 대통령은 해외 순방 경험을 언급하며 재외동포들이 본국에 대해 "버려진 자식...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">이데일리</span></div>
+      <a class="item-title" href="https://www.edaily.co.kr/news/newspath.asp?newsid=03899926645479752" target="_blank" rel="noopener">이재명 정부 2기 내각 윤곽은?...‘일 잘할’ 실용주의로 간다</a>
+      <p class="item-desc">8일 청와대 영빈관에서 열린 취임 1주년 기자회견에서 향후 개각 구상과 관련해 “적절한 시기에 적절한... 우선 교체 대상은 한 후보자가 있던 중소벤처기업부 외 문화체육관광부, 교육부 등이 꼽힌다. 서울시장 선거에서...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">매일경제</span></div>
+      <a class="item-title" href="https://www.mk.co.kr/article/12068427" target="_blank" rel="noopener">‘박근혜 국정농단’ K스포츠재단, 설립 10년만에 파산</a>
+      <p class="item-desc">검찰 수사 결과 박근혜 전 대통령은 재임 중에 안종범 당시 청와대 경제수석비서관에게 문화·체육 관련 재단법인 설립을 검토하라고 직접 지시했다. 대기업 회장들을 만난 자리에서 이 재단의 필요성을 언급하기도...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">jejudomin.co.kr</span></div>
+      <a class="item-title" href="https://www.jejudomin.co.kr/news/articleView.html?idxno=319781" target="_blank" rel="noopener">윤석열 정부 3년·12·3 내란 보도로 본 주류언론의 구조적 문제 진단</a>
+      <p class="item-desc">노무현 정부 시절 청와대, 국무총리실 공보실장, 문화체육관광부 차관보, 한국언론진흥재단 상임이사 등을 거친 언론·정책 현장의 베테랑이다. 세월호 참사 당시 '언론 참사'를 목격하며 언론개혁의 절박성을 다시...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">biz.newdaily.co.kr</span></div>
+      <a class="item-title" href="https://biz.newdaily.co.kr/site/data/html/2026/06/08/2026060800136.html" target="_blank" rel="noopener">이재명 정부의 네이버 사랑은 어디까지? … 수석·장관 이어 총리 배출</a>
+      <p class="item-desc">최휘영 문화관광체육부 장관은 야후코리아 등을 거쳐 지난 2007년 NHN(네이버 전신) 국내 총괄 등을 거쳐 대표이사를 역임했던 인사다. 하정우 전 대통령실 AI미래기획수석도 지난해까지 네이버클라우드 AI이노베이션...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">news.mtn.co.kr</span></div>
+      <a class="item-title" href="https://news.mtn.co.kr/news-detail/2026060810082873363" target="_blank" rel="noopener">또 네이버 출신…한성숙 장관 '초고속 승진' 논란</a>
+      <p class="item-desc">그는 "(이재명 대통령이) 네이버 출신 인사를 대통령실 수석비서관과 중소벤처기업부 장관에 내정하더니, 또다시 네이버 경력자를 문화체육관광부 장관 후보자로 지명했다"며 "이재명 대통령의 네이버 사랑"이라고...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">조선일보</span></div>
+      <a class="item-title" href="https://news.tvchosun.com/site/data/html_dir/2026/06/08/2026060890174.html" target="_blank" rel="noopener">'박근혜 국정농단' K스포츠재단, 파산 종료…설립 10년5개월 만</a>
+      <p class="item-desc">검찰 수사 결과 박 전 대통령은 재임 시절 안종범 당시 청와대 경제수석비서관에게 직접 문화·체육 관련 재단법인 설립을 검토하라고 지시했다. 또 대기업 회장들을 만난 자리에서 재단의 필요성을 언급한 것으로...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">연합뉴스</span></div>
+      <a class="item-title" href="https://www.yna.co.kr/view/AKR20260608096500001?input=1195m" target="_blank" rel="noopener">[지상중계] 李대통령 취임 1주년 기자회견-16</a>
+      <p class="item-desc">그게 문화다. 느낌이다, 느낌. 대한민국에 대한 느낌이 바뀌고 있는 것 같다. 대한민국 하면 말씀하신 것처럼... 물론 강훈식 (대통령실 비서)실장 시키면 잘하기도 하는데 원래 실력도 있지만, 공무원들이 예를 들면 대미...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">연합뉴스</span></div>
+      <a class="item-title" href="https://www.yna.co.kr/view/AKR20260608081800004?input=1195m" target="_blank" rel="noopener">'박근혜 국정농단' K스포츠재단, 파산 절차 마무리…설립 10년만</a>
+      <p class="item-desc">검찰 수사 결과 박 전 대통령은 재임 시절 안종범 당시 청와대 경제수석비서관에게 직접 문화·체육 관련 재단법인 설립을 검토하라고 지시하고, 대기업 회장들을 만난 자리에서 이 재단의 필요성을 언급한 것으로...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">thepublic.kr</span></div>
+      <a class="item-title" href="https://www.thepublic.kr/news/articleView.html?idxno=306800" target="_blank" rel="noopener">하의면·삼일동 506 대 42, 엄다면·북하면 606 대 57…또 나온 '동일 득...</a>
+      <p class="item-desc">김성회 전 대통령실 다문화비서관은 8일 자신의 페이스북에 광주·전남 지역 일부 투표구의 사전투표 득표수를 제시하며 "이것도 우연인가"라고 했다. 김 전 비서관이 공개한 선관위 개표 자료 캡처에 따르면 신안군...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">조선일보</span></div>
+      <a class="item-title" href="https://realty.chosun.com/site/data/html_dir/2026/06/08/2026060801052.html" target="_blank" rel="noopener">"부동산 탓에 서울 뺏겼다" 선거 패배론에 국토부 장관 교체설 솔솔</a>
+      <p class="item-desc">7일 한성숙 중소기업벤처부 장관을 차기 국무총리 후보자로 지명한 데 이어 국토부와 문화체육관광부... 현재도 청와대는 부동산 정책을 맡길 인물을 찾는 데 어려움을 겪고 있는 것으로 알려졌다. 부동산 업계 관계자는...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">ekn.kr</span></div>
+      <a class="item-title" href="https://www.ekn.kr/web/view.php?key=20260606026550838" target="_blank" rel="noopener">[李정부 1년] 소통 늘린 李대통령…‘생중계’ 타운홀 미팅</a>
+      <p class="item-desc">지난달 26일 국무조정실과 문화체육관광부가 배포한 국민주권정부 성과집에 따르면, 이재명 정부 출범 이후... 대통령실을 용산에서 청와대로 옮긴 뒤 비서실장, 정책실장, 국가안보실장 등 핵심 참모들이 대통령과 같은...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">seoul.co.kr</span></div>
+      <a class="item-title" href="https://www.seoul.co.kr/news/politics/2026/06/08/20260608004002?wlog_tag3=naver" target="_blank" rel="noopener">이례적 기업인 출신 총리… 李 실용주의 ‘경제 성과’ 집중 예고</a>
+      <p class="item-desc">한 후보자 외에도 배경훈 부총리 겸 과학기술정보통신부 장관, 김정관 산업통상부 장관, 최휘영 문화체육관... 청와대 관계자는 “한 후보자는 기업인 출신의 경제통으로 지난 1년간 장관직을 수행하며 국정운영 능력이...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">중앙일보</span></div>
+      <a class="item-title" href="https://www.joongang.co.kr/article/25434670" target="_blank" rel="noopener">보수·기업인 넘나든 ‘실용인사’는 합격점…‘정치 복원’은 과제 [李...</a>
+      <p class="item-desc">기업인 출신 김정관 산업통상부 장관, 최휘영 문화체육관광부 장관과 보수 진영 출신 권오을 국가보훈부... 청와대에 따르면, 지난 1년 이 대통령의 국내 이동 거리는 지구 반 바퀴가 넘는 2만2929㎞였다. 전국 14개 시도...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">동아일보</span></div>
+      <a class="item-title" href="https://www.donga.com/news/Politics/article/all/20260608/134066073/2" target="_blank" rel="noopener">非정치인 ‘실무형’ 총리카드… “李, 2년차 국정 주도권 직접 쥘듯”</a>
+      <p class="item-desc">개각은 공석이 된 중기부를 비롯해 국토교통부 보건복지부 교육부 문화체육관광부 장관 등 5곳 안팎의 장관 인사가 검토되고 있다. 공석인 AI미래기획수석비서관을 포함해 민정수석비서관과 사회수석비서관 등 청와대...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">조선일보</span></div>
+      <a class="item-title" href="https://www.chosun.com/politics/politics_general/2026/06/08/LE7OUY5G2NGI3KY3B5WOCPYYXI/?utm_source=naver&utm_medium=referral&utm_campaign=naver-news" target="_blank" rel="noopener">선거 결과 지켜본 李, 정치색 적은 인물로 ‘깜짝 총리’ 카드 선택</a>
+      <p class="item-desc">청와대 안팎에서는 국토교통부와 문화체육관광부, 보건복지부, 교육부, 외교부 등이 장관 교체 가능성이 있는 부처로 거론되고 있다. 청와대 내에서는 수석·비서관 일부 교체가 예상되며, 민정수석 등이 대상으로 꼽힌다....</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.07</span><span class="item-source">eroun.net</span></div>
+      <a class="item-title" href="https://www.eroun.net/news/articleView.html?idxno=82549" target="_blank" rel="noopener">[이로운주목]이 대통령, 한성숙 총리 후보자 지명…'AI·민생경제' 앞세...</a>
+      <p class="item-desc">한 후보자 지명은 향후 개각과 청와대 참모진 개편의 출발점으로도 해석된다. 정부 안팎에서는 보건복지부, 문화체육관광부, 국토교통부, 교육부 등 일부 부처 장관 교체 가능성이 거론되고 있으며, 공석인 AI수석을 비롯해...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.07</span><span class="item-source">한겨레</span></div>
+      <a class="item-title" href="https://www.hani.co.kr/arti/politics/bluehouse/1262335.html" target="_blank" rel="noopener">한성숙 총리 후보자 ‘파격 발탁’…“이 대통령, 정치색 확 빼려 한 듯...</a>
+      <p class="item-desc">청와대는 총리 인선을 시작으로 일부 장관 교체와 청와대 개편에 속도를 낼 것으로 보인다. 한 후보자의 후임을 지명하는 것을 시작으로 국토교통부, 문화체육관광부 등 3~4개 부처 개각이 거론되고 있다. 또 정부 출범...</p>
+    </div></div></div>
+  </div><div class="grid-card" id="section-grac" style="--card-color:#2BAE66;">
+    <div class="card-header">
+      <div class="card-title-row">
+        <span class="card-emoji">🎮</span>
+        <h2 class="card-title">게임물관리위원회</h2>
+        <span class="card-badge" style="background:#2BAE6618;color:#2BAE66;border:1px solid #2BAE6640;">14건</span>
+      </div>
+      <div class="tabs-bar"><button class="tab-btn active" onclick="switchTab(this,'grac-news')">보도 14</button></div>
+    </div>
+    <div class="card-body"><div class="tab-pane active" id="grac-news"><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">게임포커스</span></div>
+      <a class="item-title" href="https://gamefocus.co.kr/detail.php?number=176444" target="_blank" rel="noopener">게임물관리위원회 '확률형 아이템 피해구제센터' 출범... 김진석 본부장...</a>
+      <p class="item-desc">국내 게임 산업의 패러다임을 바꾼 게임산업진흥에 관한 법률 개정안이 본격 시행된 가운데 게임물관리위원회가 게임사의 위법 행위를 감시하고 이용자의 권익을 보호하기 위한 전담 기구인 ‘확률형 아이템...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">매일경제</span></div>
+      <a class="item-title" href="https://www.mk.co.kr/article/12068392" target="_blank" rel="noopener">출범 100일 확률형 아이템 피해구제센터 “생태계 신뢰 회복 ‘목표’”</a>
+      <p class="item-desc">지난 2월 27일 개소한 게임물관리위원회 산하 ‘확률형 아이템 피해구제센터’가 출범 100일을 맞았다. 게임위는 센터를 통해 게임 이용자와 게임 사업자 간 소통의 가교 역할을 하며 생태계의 신뢰를 되찾겠다는 목표를...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">ZDNet Korea</span></div>
+      <a class="item-title" href="https://zdnet.co.kr/view/?no=20260608141815" target="_blank" rel="noopener">게임물관리위원회, '확률형 아이템 피해구제센터' 출범 3개월 성과는?</a>
+      <p class="item-desc">게임물관리위원회(이하 게임위)가 지난 2월 신설한 '확률형 아이템 피해구제센터(이하 피해구제센터)' 운영 현황과 향후 로드맵을 공개했다. 게임위는 지난 5일 한국게임기자클럽 주최로 열린 간담회를 통해...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">game.dailyesports.com</span></div>
+      <a class="item-title" href="http://game.dailyesports.com/view.php?ud=20260605190312768943da15d9d2_26" target="_blank" rel="noopener">게임위 "피해구제센터, 내년 본격 가동…절차 표준화 준비 중"</a>
+      <p class="item-desc">지난 2월 출범한 게임물관리위원회(이하 게임위) 확률형 아이템 피해구제센터(이하 피해구제센터)가 내년 본격 가동을 앞두고 실효성 확보를 위한 잰걸음에 나섰다. 올해는 약 17억 원의 예산과 20여 명의 인력을 투입해...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">khgames.co.kr</span></div>
+      <a class="item-title" href="https://www.khgames.co.kr/news/articleView.html?idxno=305139" target="_blank" rel="noopener">[간담회] 확률형 아이템 피해구제센터, "이용자 권익 보호·게임산업 건...</a>
+      <p class="item-desc">게임물관리위원회(이하 게임위)가 지난 2월 확률형 아이템 피해구제센터(이하 피해구제센터)를 출범했다. 피해구제센터는 게임 이용자 권익 보호를 위해 힘을 쏟는 한편, 게임산업의 신뢰회복과 건강하고 지속 가능한...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">동아일보</span></div>
+      <a class="item-title" href="https://game.donga.com/122851/" target="_blank" rel="noopener">게임위 김진석 본부장 “‘확률형 아이템 피해구제센터’, 규제 아닌 신...</a>
+      <p class="item-desc">“확률형 아이템 제도는 사업자를 처벌하기 위한 규제가 아니라 게임산업 생태계의 신뢰를 회복하고 건강한 성장을 지원하기 위한 장치다.”이는 김진석 게임물관리위원회 이용자보호본부장이 한 말이다. 지난 5일...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">동아일보</span></div>
+      <a class="item-title" href="https://game.donga.com/122852/" target="_blank" rel="noopener">게임위 “확률 표기 미이행 해외게임사 12건, 삭제 조치까지 했다”</a>
+      <p class="item-desc">지난 6월 5일 서울 서대문구 충정빌딩 12층 게임물관리위원회 수도권사무소에서 게임기자클럽이 주최한 확률형 아이템 피해구제센터 공동 인터뷰가 열렸다. 이날 현장에서는 권혁우 사무국장, 윤종원 경영지원본부장...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">gamevu.co.kr</span></div>
+      <a class="item-title" href="https://www.gamevu.co.kr/news/articleView.html?idxno=58496" target="_blank" rel="noopener">[현장] 게임위, "게임 생태계 위해 처벌보다 합의-신뢰 회복 우선"</a>
+      <p class="item-desc">게임물관리위원회(이하 게임위)가 확률형 아이템 규제 및 이용자 피해 구제를 위한 본격적인 행보에 나서고 있다. 지난 5일 서울 충정로에 위치한 게임위 서울 사무소에서는 확률형 아이템 피해구제센터의 현황과 향후...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">gameple.co.kr</span></div>
+      <a class="item-title" href="https://www.gameple.co.kr/news/articleView.html?idxno=215776" target="_blank" rel="noopener">게임위 "확률형 아이템 피해구제센터, 이렇게 만들었습니다"</a>
+      <p class="item-desc">게임물관리위원회 김진석 이용자보호본부장 게임물관리위원회(이하 게임위)가 '확률형 아이템 피해구제센터'를 통해 게임 이용자 권익 보호와 산업 신뢰 회복에 나선다. 게임위는 확률형 아이템 관련 분쟁을 조정해...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">inews24.com</span></div>
+      <a class="item-title" href="http://www.inews24.com/view/1974316" target="_blank" rel="noopener">'출범 3개월' 게임위 확률형 피해구제센터…609건 피해 접수</a>
+      <p class="item-desc">게임물관리위원회 산하 '확률형 아이템 피해구제센터'가 출범 3개월 만에 609건의 피해 상담을 접수했다. 확률형 아이템 정보공개 제도를 이행하지 않아 국내 시장에서 퇴출된 게임은 12종에 이른 것으로 나타났다....</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">kookje.co.kr</span></div>
+      <a class="item-title" href="http://www.kookje.co.kr/news2011/asp/newsbody.asp?code=0300&key=20260605.99099001449" target="_blank" rel="noopener">동아대 로스쿨 12기 졸업생 일동,후배 사랑 발전기금 1200만 원 쾌척</a>
+      <p class="item-desc">박민아(게임물관리위원회) 변호사, 양재성(울산지방법원) 재판연구원, 이덕영(법무법인(유한) 정인) 변호사 등 각계에서 활약 중인 12기 동문 12명이 참여했다. 기부자 대표로 참석한 박 변호사는 “늦은 나이에...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">dnews.co.kr</span></div>
+      <a class="item-title" href="https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606071235166470320" target="_blank" rel="noopener">[부산ㆍ경남 대학 브리핑 모음(6월8일)] 국립창원대, 구성원과 함께 걸...</a>
+      <p class="item-desc">박민아(게임물관리위원회) 변호사, 양재성(울산지방법원) 재판연구원, 이덕영(법무법인(유한) 정인) 변호사 등 각계에서 활약 중인 12기 동문 12명이 참여했다. 기부자 대표로 참석한 박 변호사는 “늦은 나이에...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.07</span><span class="item-source">busan.com</span></div>
+      <a class="item-title" href="https://www.busan.com/view/busan/view.php?code=2026060712330663908" target="_blank" rel="noopener">동아대 로스쿨 12기 졸업생, 4년째 발전기금 기부</a>
+      <p class="item-desc">박민아(게임물관리위원회) 변호사, 양재성(울산지방법원) 재판연구원, 이덕영(법무법인 정인) 변호사 등 각계에서 활약 중인 12기 동문 12명이 참여했다. 로스쿨 12기 졸업생들의 기부는 이번이 4년째다. 졸업 직후인...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.05</span><span class="item-source">전자신문</span></div>
+      <a class="item-title" href="https://www.etnews.com/20260605000002" target="_blank" rel="noopener">한국공학대, 게임·AI 연구자 200명 모아 산업 확장 논의 본격화</a>
+      <p class="item-desc">육군미래혁신연구센터, 육군교육사령부, 게임물관리위원회 등 공공·연구기관도 함께했다. 산업계 발표도 이어졌다. 러버블 이보라 엠버서더는 '바이브코딩의 게임 개발 활용 가능성'을, 앱인토스 황지만 본부장은...</p>
+    </div></div></div>
+  </div><div class="grid-card" id="section-mcst" style="--card-color:#7C5CBF;">
+    <div class="card-header">
+      <div class="card-title-row">
+        <span class="card-emoji">🏢</span>
+        <h2 class="card-title">문화체육관광부</h2>
+        <span class="card-badge" style="background:#7C5CBF18;color:#7C5CBF;border:1px solid #7C5CBF40;">41건</span>
+      </div>
+      <div class="tabs-bar"><button class="tab-btn active" onclick="switchTab(this,'mcst-news')">보도 41</button></div>
+    </div>
+    <div class="card-body"><div class="tab-pane active" id="mcst-news"><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">cnbizm.com</span></div>
+      <a class="item-title" href="https://www.cnbizm.com/news/articleView.html?idxno=304984" target="_blank" rel="noopener">9월 개막하는 '키아프 서울 2026', 참가 갤러리 공개</a>
+      <p class="item-desc">한편 문화체육관광부는 2023년부터 '대한민국 미술축제'를 통해 키아프 서울과 프리즈 서울을 비롯한 주요 미술 행사를 연계하며 국내 미술계 전반이 함께 어우러지는 통합형 예술 축제를 추진해오고 있다....</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">news1.kr</span></div>
+      <a class="item-title" href="https://www.news1.kr/photos/7950440" target="_blank" rel="noopener">최휘영 장관, 문화예술정책자문위 연극 분과 회의 주재</a>
+      <p class="item-desc">= 최휘영 문화체육관광부 장관이 9일 서울 종로구 국립현대미술관 서울관에서 열린 문화예술정책자문위원회 연극 분과 제3차 회의를 주재하고 있다. (문화체육관광부 제공. 재판매 및 DB금지) 2026.6.9/뉴스1</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">news1.kr</span></div>
+      <a class="item-title" href="https://www.news1.kr/photos/7950439" target="_blank" rel="noopener">문화예술정책자문위원회 연극 분과 제3차 회의</a>
+      <p class="item-desc">= 최휘영 문화체육관광부 장관이 9일 서울 종로구 국립현대미술관 서울관에서 열린 문화예술정책자문위원회 연극 분과 제3차 회의를 주재하고 있다. (문화체육관광부 제공. 재판매 및 DB금지) 2026.6.9/뉴스1</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">breaknews.com</span></div>
+      <a class="item-title" href="http://www.breaknews.com/1212957" target="_blank" rel="noopener">공주문화관광재단, 별빛 여행 ‘2026 공주 페스티벌’ 13일 개막</a>
+      <p class="item-desc">이번 축제는 문화체육관광부, 한국관광공사, 공주시가 공동으로 추진하는 '2026 야간관광 특화도시 조성사업'의 핵심 콘텐츠로 기획됐다. 올해로 3회째를 맞이한 공주...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">news1.kr</span></div>
+      <a class="item-title" href="https://www.news1.kr/photos/7950441" target="_blank" rel="noopener">모두발언 하는 최휘영 장관</a>
+      <p class="item-desc">= 최휘영 문화체육관광부 장관이 9일 서울 종로구 국립현대미술관 서울관에서 열린 문화예술정책자문위원회 연극 분과 제3차 회의에서 모두발언을 하고 있다. (문화체육관광부 제공. 재판매 및 DB금지) 2026.6.9/뉴스1</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">ohmynews.com</span></div>
+      <a class="item-title" href="https://www.ohmynews.com/NWS_Web/View/at_pg.aspx?CNTN_CD=A0003241798&CMPT_CD=P0010&utm_source=naver&utm_medium=newsearch&utm_campaign=naver_news" target="_blank" rel="noopener">시흥시, 관광 자전거 무료 대여 등 자전거 여행 활성화 추진</a>
+      <p class="item-desc">▲  자전거 여행 활성화 홍보 포스터 ⓒ 시흥시 경기도 시흥시가 문화체육관광부 주관 '지역 자전거여행 활성화 공모사업'에 지난해에 이어 올해도 선정됐다고 9일 밝혔다. 총사업비는 1억8천만 원(국비 50%, 시비 50%)이다....</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">mediaus.co.kr</span></div>
+      <a class="item-title" href="https://www.mediaus.co.kr/news/articleView.html?idxno=317225" target="_blank" rel="noopener">방미통위 지역방송 지원예산 7억 증액에 "생색내기"</a>
+      <p class="item-desc">지난해 방발기금에서 지출되던 국악방송·아리랑TV 지원예산 157억 원이 문화체육관광부 일반회계로 전환됐다. 하지만 지역·중소방송 지원 예산은 5억 원 증액에 그쳤다. 재정경제부는 아리랑·국악방송에 지원하지 않은...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">hidomin.com</span></div>
+      <a class="item-title" href="https://www.hidomin.com/news/articleView.html?idxno=708588" target="_blank" rel="noopener">청도군, 2026 길위의 인문학 공모사업 선정</a>
+      <p class="item-desc">청도어린이도서관은 지난 4일 문화체육관광부 주최 '2026 길위의 인문학' 공모사업에 선정됐다고 밝혔다. '길위의 인문학' 사업은 문화체육관광부가 주최하고, 한국도서관협회와 한국문화예술교육진흥원이 주관하는...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">news.kbs.co.kr</span></div>
+      <a class="item-title" href="https://news.kbs.co.kr/news/pc/view/view.do?ncd=8581693&ref=A" target="_blank" rel="noopener">국경 넘는 K-콘텐츠 불법유통 잡는다…문체부, 국제공조 수사 강화</a>
+      <p class="item-desc">문화체육관광부는 한국저작권보호원과 함께 오늘(9일) 서울 롯데호텔에서 '2026 저작권 보호 집행 국제공조회의'를 열고 해외에서 'K-콘텐츠' 저작권 침해 사범을 검거할 작전을 모색했습니다. 태국, 인도네시아, 베트남...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">dhnews.co.kr</span></div>
+      <a class="item-title" href="https://dhnews.co.kr/news/view/1065596689149979" target="_blank" rel="noopener">안양대 국어문화원, ‘문학 더하기 문해력 교실’ 운영</a>
+      <p class="item-desc">안양대학교 국어문화원이 문화체육관광부 국립국어원 ‘2026년 청소년 문해력 교실’ 사업의 일환으로 청소년의 문해력과 언어문화 감수성을 높이기 위해 ‘문학 더하기 문해력 교실’을 운영한다. 읽기와 표현 능력의...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">중앙일보</span></div>
+      <a class="item-title" href="https://www.joongang.co.kr/article/25435235" target="_blank" rel="noopener">‘제대로’ ‘자체’ 도서전까지 등장...‘완판’ 서울국제도서전의 성...</a>
+      <p class="item-desc">한편, 2024년 문화체육관광부와의 갈등으로 지원금이 끊긴 후 설립된 ‘주식회사 서울국제도서전’은 올해 운영 2주년을 맞는다. 당시 운영 지속을 위해 기부금을 모았지만 실패하고, 주식회사라는 방식을 통해 약 10억원...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">gosiweek.com</span></div>
+      <a class="item-title" href="https://www.gosiweek.com/article/1065596261903053" target="_blank" rel="noopener">캐치테이블 글로벌 앱, MAU 100만 돌파…방한 외국인 미식 플랫폼 입지 ...</a>
+      <p class="item-desc">문화체육관광부에 따르면 지난 4월 방한 외국인 관광객은 203만 명으로 집계됐다. 월간 기준 2개월 연속 200만 명을 넘어서는 등 관광 수요가 확대되는 가운데 캐치테이블 글로벌 앱 역시 빠른 성장세를 이어가고 있다....</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">nocutnews.co.kr</span></div>
+      <a class="item-title" href="https://www.nocutnews.co.kr/news/6530314?utm_source=naver&utm_medium=article&utm_campaign=20260609040042" target="_blank" rel="noopener">충주 다이브페스티벌, 12일 충주종합운동장서 월드컵 응원전</a>
+      <p class="item-desc">올해는 문화체육관광부가 주관하는 '대형 한류종합행사(MyK FESTA)' 연계 지방자치단체 행사 공모에도 선정돼 더욱 다채로운 K-컬처 프로그램을 선보일 계획이다. K-팝 공연, 거리예술과 스트릿댄스, 시민 참여형 댄스...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">asiaa.co.kr</span></div>
+      <a class="item-title" href="https://www.asiaa.co.kr/news/articleView.html?idxno=251730" target="_blank" rel="noopener">[A 호텔·여행 소식] 켄싱턴호텔앤리조트, 국내 관광 활성화 '플레이케...</a>
+      <p class="item-desc">◇노랑풍선, '2026 대한민국 여름맞이 숙박세일 페스타' 참여=노랑풍선은 문화체육관광부와 한국관광공사가 주관하는 '2026 대한민국 여름맞이 숙박세일 페스타'에 참여하고, 정부 지원 숙박 할인에 더해 최대 13만원...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">매일경제</span></div>
+      <a class="item-title" href="https://www.mk.co.kr/article/12069512" target="_blank" rel="noopener">“미식 관광이 대세”… 방한 외국인에 필수앱 떠오른 ‘K-예약’</a>
+      <p class="item-desc">문화체육관광부에 따르면 지난 4월 방한 외국인 관광객은 203만명으로 2개월 연속 200만 명을 넘어서는 등 국내 인바운드 여행 수요가 완연한 회복세를 보이고 있다. 이러한 흐름 속에서 별도의 한국어 소통이나 국내...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">jemin.com</span></div>
+      <a class="item-title" href="https://www.jemin.com/news/articleView.html?idxno=838646" target="_blank" rel="noopener">제주 씨름 이끈 박재홍 회장, 문체부 장관 표창</a>
+      <p class="item-desc">박재홍 제주도씨름협회장이 자난 8일 '위더스제약 2026 보은단오장사씨름대회' 및 '제15회 씨름의 날' 기념식에서 문화체육관광부 장관 표창을 받았다. (=제주도체육회 제공) 제주 씨름 저변 확대와 유망선수 육성에 힘써온...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">jemin.com</span></div>
+      <a class="item-title" href="https://www.jemin.com/news/articleView.html?idxno=838645" target="_blank" rel="noopener">제주, 전국 패러글라이딩대회 단체전 우승</a>
+      <p class="item-desc">'제26회 문화체육관광부장관기 전국 패러글라이딩대회'가 지난 5일부터 7일까지 사흘간 제주시 금악활공장(금오름) 일원에서 열렸다. (=대한패러글라이딩협회 제공) 전국 페러글라이딩 선수들이 제주 금오름 상공에서...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">newstnt.com</span></div>
+      <a class="item-title" href="https://www.newstnt.com/news/articleView.html?idxno=705718" target="_blank" rel="noopener">혜전대 호텔조리계열, 한국음식관광박람회 대상 3개 '석권'</a>
+      <p class="item-desc">혜전대는 지난 6일 개최된 이번 대회에서 문화체육관광부장관상, 해양수산부장관상, 종로구청장상 등 주요 부문 대상을 석권했다고 밝혔다. 특히 충남형 및 조기취업형 계약학과 소속 학생들을 포함한 참가자 전원이...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">news.kbs.co.kr</span></div>
+      <a class="item-title" href="https://news.kbs.co.kr/news/pc/view/view.do?ncd=8581682&ref=A" target="_blank" rel="noopener">국내 최대 미술장터 ‘키아프 서울’ 9월 서울 코엑스에서 열린다</a>
+      <p class="item-desc">또한 문화체육관광부가 주관하는 대한민국 미술축제와 서울아트위크 기간에 맞춰 키아프 서울과 프리즈 서울이 열리는 만큼, 서울 전역에서 다양한 전시와 미술 행사가 열릴 것이라고 덧붙였습니다. 특히 9월 1일에는...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">newsworker.co.kr</span></div>
+      <a class="item-title" href="http://www.newsworker.co.kr/news/articleView.html?idxno=430418" target="_blank" rel="noopener">해남군, '전국 근대5종 800명 집결'... 스포노믹스 힘 싣는 일주일</a>
+      <p class="item-desc">전남 해남군이 제37회 문화체육관광부장관기 전국근대5종경기대회를 오는 12일부터 18일까지 군 일원에서 연다고 9일 밝혔다. 전국 선수와 임원 800여 명이 찾는 이번 대회를 통해 스포츠마케팅과 지역경제 활성화를 함께...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">newspim.com</span></div>
+      <a class="item-title" href="https://www.newspim.com/news/view/20260609000767" target="_blank" rel="noopener">金총리 "지난 1년은 회복 시기…이제 성과의 그늘도 봐야 한다"</a>
+      <p class="item-desc">회의에서 인사말을 하고 있다.2026.06.09gdlee@newspim.com 김 총리는 이어 "전체 자살 사망자는 다행스럽게... 이번에도 대규모 참여가 예상된다"며 "문체부(문화체육관광부), 행안부 등 관계 부처는 지방 정부와 협력해서...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">view.asiae.co.kr</span></div>
+      <a class="item-title" href="https://view.asiae.co.kr/article/2026060820524649674" target="_blank" rel="noopener">한총리 지명 후속 인선 주목…집권 2년 차 개각 시동</a>
+      <p class="item-desc">대대적인 일괄 교체보다는 총리 교체와 부처별 현안, 후임 인선 상황을 감안해 단계적으로 인사를... 문체부와 교육부도 집권 2년 차 성과를 내야 할 분야로 꼽힌다. 외교·안보 라인도 재정비할 가능성이 있다는 관측도...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">eroun.net</span></div>
+      <a class="item-title" href="https://www.eroun.net/news/articleView.html?idxno=82671" target="_blank" rel="noopener">[이로운주목]정부 "문화강국 토대 구축"...문화연대 "문화정책 대전환 ...</a>
+      <p class="item-desc">문체부, 콘텐츠 수출·관광·문화향유 지표 등 출범 1년 성과 공개문화연대 "문화정책 실패" 평가하며 인사·행정 구조 문제 제기이재명 대통령 'K-이니셔티브' 제시...문화적 영향력·국가 경쟁력 강조 이로운넷 = 이수진...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">kjdaily.com</span></div>
+      <a class="item-title" href="http://www.kjdaily.com/article.php?aid=1780908678680020006" target="_blank" rel="noopener">“가난했지만 아름다웠던 제자리 삶은 그리워지는 것”</a>
+      <p class="item-desc">개관 10주년을 맞은 비움박물관이 오는 10일 서울에서 문체부 공모사업 순회전시를 연다. 사진은 전시에 대해... 이번 전시는 문화체육관광부 순회전 공모사업에 선정된 사업으로, 오는 10일부터 7월12일까지 서울 인사동...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">머니투데이</span></div>
+      <a class="item-title" href="https://www.mt.co.kr/culture/2026/06/08/2026060815223944695" target="_blank" rel="noopener">월드컵 직후 떠나는 정몽규...기업인? 축구인? 후임은 누가</a>
+      <p class="item-desc">정 회장이 임명한 핵심 인사들 사이에는 문화체육관광부가 중징계를 요구한 축구인들도 포함돼 있는데 이들... 문체부와의 법적 분쟁이 진행중인데다 국정감사 등 불편한 자리에 불려 나가야 하는 만큼 책임을 지려는...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">gukjenews.com</span></div>
+      <a class="item-title" href="https://www.gukjenews.com/news/articleView.html?idxno=3602822" target="_blank" rel="noopener">박양우 전 문체부 장관, 제5회 세계관광산업컨퍼런스 장기체류형 관광 ...</a>
+      <p class="item-desc">관광의 인사이트를 공유했다. 우리는 현재 인류의 이동과 삶의 방식이 근본적으로 재편되는 '관광 역사상... 동네 단골 카페를 만들고, 마트에서 장을 보며, 현지 주민과 인사를 나누고 교류하며 살게 된다. 슬로우...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">globalepic.co.kr</span></div>
+      <a class="item-title" href="http://www.globalepic.co.kr/view.php?ud=20260608103617757148439a4874_29" target="_blank" rel="noopener">정부 요직 꾀 차는 네이버 출신들</a>
+      <p class="item-desc">한성숙 중소벤처기업부 장관이 김민석 국무총리의 후임자로 지명되면서 이재명 정부 내 네이버 출신 인사... 이 같은 경력은 문체부 공식 약력에도 명시되어 있다. 하정우 전 대통령실 AI미래기획수석도 네이버의...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">withinnews.co.kr</span></div>
+      <a class="item-title" href="http://www.withinnews.co.kr/news/view.html?section=1&category=5&item=&no=39500" target="_blank" rel="noopener">‘삼인성호’의 호랑이 소동이 남긴 것…국립발레단 단장 인선이 증명해...</a>
+      <p class="item-desc">장관의 공언대로 문체부의 후보 명단에 현장이 우려하는 ‘무자격 인사’가 없다면 다행스러운 일이다. 하지만 진짜 시험대는 지금부터다. 뜬소문을 부인하는 것은 쉽지만, 그 부인이 정당했음을 ‘최종 인선 결과’로...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">yonhapnewstv.co.kr</span></div>
+      <a class="item-title" href="http://www.yonhapnewstv.co.kr/news/MYH20260608061021iMF" target="_blank" rel="noopener">[뉴스초점] 이대통령, 선관위 행정 실패에 "검경 합수본 구성"</a>
+      <p class="item-desc"><질문 4> 한성숙 후보자가 지명되면서 현 정부 내 문체부 장관, 전 AI 수석 등 네이버 출신 인사들이 지나치게 약진한다는 지적이 나옵니다. AI 대전환과 실용주의 경제를 위한 적임자라는 평가도 있지만, 특정 기업 출신...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">seoul.co.kr</span></div>
+      <a class="item-title" href="https://www.seoul.co.kr/news/editOpinion/column/journalist-viewpoint/2026/06/08/20260608027007?wlog_tag3=naver" target="_blank" rel="noopener">[데스크 시각] 정몽규 축구협회장 사퇴 단상</a>
+      <p class="item-desc">2023년 3월부터 2024년 2월까지 대표팀을 맡았던 위르겐 클린스만 감독은 변명의 여지가 없는 ‘인사 참사’... 그러므로 홍명보호가 문체부 요구사항을 충실히 이행해 주길 촉구한다. 덕분에 나도 술값 내기에서 이겨 보자....</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">kmib.co.kr</span></div>
+      <a class="item-title" href="https://www.kmib.co.kr/article/view.asp?arcid=1780812660&code=13110000&cp=nv" target="_blank" rel="noopener">국립발레단장 내정설에 단원들 ‘반발’… 최 장관 “루머”</a>
+      <p class="item-desc">예술가 커뮤니티와 소셜미디어 등에서는 “국립발레단 단원들이 단체 행동에 나설 만큼 산하기관 인사 행정의 신뢰를 무너뜨린 문체부가 반성은커녕 거친 표현으로 일축하는 것은 부적절하다”는 비판이 쏟아지고 있다.</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">중앙일보</span></div>
+      <a class="item-title" href="https://www.joongang.co.kr/article/25434620" target="_blank" rel="noopener">국립발레단 “낙하산 단장 반대”…최휘영 문체장관 “허황된 루머”</a>
+      <p class="item-desc">국립 예술단체 단원들이 기관장 인사와 관련해 집단으로 의사를 표명한 것은 처음이다. 국립발레단 단장... 최휘영 문체부 장관은 해명에 나섰다. 그는 같은 날 SNS에서 “이재명 캠프 출신이자 직업 발레단 경력이 없는...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.07</span><span class="item-source">경향신문</span></div>
+      <a class="item-title" href="https://www.khan.co.kr/article/202606072035005" target="_blank" rel="noopener">국립발레단 차기 단장 ‘정권 낙하산’ 내정설…최휘영 장관 “허황된 ...</a>
+      <p class="item-desc">이재명 정부의 문화예술 기관장 인선을 둘러싸고 ‘보은 인사’ 논란이 확산되는 가운데 친정부 인사의 국립발레단장 하마평이 돌자 단원들이 집단행동에 나선 것이다. 이에 최휘영 문화체육관광부 장관은 “헛소문”...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.07</span><span class="item-source">매일경제</span></div>
+      <a class="item-title" href="https://www.mk.co.kr/article/12067915" target="_blank" rel="noopener">개각 속도내는 이재명 정부 … 부처 4~5곳 장관 바뀔 듯</a>
+      <p class="item-desc">문체부와 교육부도 개각 대상에 오른 것으로 전해졌다. 부동산 정책을 맡은 국토부도 조만간 장관 교체가... 강 실장은 "국가인공지능전략위원회 부위원장 등 여러 인사를 준비하고 있다"며 "곧 발표드릴 수 있을 것"이라고...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.07</span><span class="item-source">한국경제</span></div>
+      <a class="item-title" href="https://www.hankyung.com/article/2026060716901" target="_blank" rel="noopener">'낙하산 인사' 피로감…침묵 깬 국립발레단원들 왜?</a>
+      <p class="item-desc">그 약속이 진심이라면 문체부는 단원들의 집단행동에 불쾌해할 것이 아니라, 이 사태의 무게를 엄중하게... ‘당연한 상식’의 사수다. 이번 사태는 향후 문화예술계 인사가 나아가야 할 방향이 무엇인지 명확히 보여준다.</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.07</span><span class="item-source">ttlnews.com</span></div>
+      <a class="item-title" href="http://www.ttlnews.com/news/articleView.html?idxno=3114331" target="_blank" rel="noopener">'제5회 세계관광산업컨퍼런스' 성료 ... 세계 관광 리더들, 수원서 '체류...</a>
+      <p class="item-desc">장·차관급 인사, 국내외 관광업계 인사, 학계, 언론사 등 약 200여 명이 참석한 가운데 '장기 체류형 관광의... # 축사, 강정원 문체부 실장 ... "장기 체류형 관광은 핵심 화두, 지역 경제 살리는 전략 산업으로 육성...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.07</span><span class="item-source">매일경제</span></div>
+      <a class="item-title" href="https://www.mk.co.kr/article/12067700" target="_blank" rel="noopener">국립발레단 새 단장 놓고 내홍… 단원들 반발에 문체부장관 “헛소문”</a>
+      <p class="item-desc">보은·낙하산 인사 논란으로 문화예술계의 거센 반발을 사고 있다. 지난 4월 황교익 한국문화관광연구원장, 서승만 국립정동극장 대표 등의 임명을 두고 65개 문화예술 단체들이 모여 인사 재검토와 전문성 중심의 인사...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.07</span><span class="item-source">tournews21.com</span></div>
+      <a class="item-title" href="https://www.tournews21.com/news/articleView.html?idxno=136162" target="_blank" rel="noopener">국립발레단 차기 단장 '캠프 인사' 하마평에 단원들 반발... 최휘영 문체...</a>
+      <p class="item-desc">직업 발레단 경력이 없는 정치권 캠프 출신 인사가 내정됐다는 소문이 돌자 단원들이 역사상 전례 없는 공개 입장문을 내며 집단 반발했다. 논란이 확산하자 문화체육관광부 장관이 직접 "사실무근"이라며 해명에 나섰다....</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.07</span><span class="item-source">biz.sbs.co.kr</span></div>
+      <a class="item-title" href="https://biz.sbs.co.kr/article_hub/20000314922?division=NAVER" target="_blank" rel="noopener">국무총리도 배출하나…네이버, 李정부서 존재감 부각</a>
+      <p class="item-desc">정부 인사들도 관심을 끌고 있습니다. 최휘영 문화체육관광부 장관은 NHN 네이버본부 기획실장, NHN 네이버부문장, NHN 국내담당 총괄 대표이사 등을 지낸 인물입니다. 문체부 공식 약력에도 이 같은 경력이 기재돼...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.07</span><span class="item-source">jnilbo.com</span></div>
+      <a class="item-title" href="https://www.jnilbo.com/news/articleView.html?idxno=90000040470" target="_blank" rel="noopener">'첫 여성 CEO' 포털 경영인에서 국무총리 후보자로…IT 인재 중용 눈길</a>
+      <p class="item-desc">문체부 수장부터 AI 수석까지…정부 내 빛 발하는 '네이버 출신' 한 후보자의 총리 지명을 계기로 네이버 출신 전현직 주요 정부 인사들도 관심을 끌고 있다. 최휘영 문화체육관광부 장관은 NHN 네이버본부 기획실장, NHN...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.05</span><span class="item-source">sisain.co.kr</span></div>
+      <a class="item-title" href="https://www.sisain.co.kr/news/articleView.html?idxno=57929" target="_blank" rel="noopener">언론재단 이사장 해임 요청안, 그 뒤엔 ‘짜인 각본’이 있었다 [정동에...</a>
+      <p class="item-desc">문체부 장관이 언론재단 이사장을 면담한 사실이 이미 보도자료로 나와 있었던 것이다. “언론재단의 리더십이 와해되었으며 문체부로서는 곧 특단의 대책을 강구하여 시행할 것”이라는 게 요지였다. 재단의 담당...</p>
+    </div></div></div>
+  </div><div class="grid-card" id="section-ftc" style="--card-color:#F5A623;">
+    <div class="card-header">
+      <div class="card-title-row">
+        <span class="card-emoji">⚖️</span>
+        <h2 class="card-title">공정거래위원회</h2>
+        <span class="card-badge" style="background:#F5A62318;color:#F5A623;border:1px solid #F5A62340;">23건</span>
+      </div>
+      <div class="tabs-bar"><button class="tab-btn active" onclick="switchTab(this,'ftc-news')">보도 23</button></div>
+    </div>
+    <div class="card-body"><div class="tab-pane active" id="ftc-news"><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">블로터</span></div>
+      <a class="item-title" href="https://www.bloter.net/news/articleView.html?idxno=664922" target="_blank" rel="noopener">탱크데이가 깬 '미등기 총수'…정용진, 주주 평가대 선다</a>
+      <p class="item-desc">베이커리 계열사(신세계SVN) 부당지원 논란으로 공정거래위원회의 제재와 검찰 조사가 진행 중이었고, 이마트... 공간과 콘텐츠, 첨단 인프라를 융합한 그룹의 새 먹거리까지 직접 챙기겠다는 강력한 의지의 표명으로...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">eroun.net</span></div>
+      <a class="item-title" href="https://www.eroun.net/news/articleView.html?idxno=82726" target="_blank" rel="noopener">아이센스블랙라벨PC존, PC방창업 시장서 차별화된 운영 모델 제시</a>
+      <p class="item-desc">주요 게임사 경영진과의 회동 장소로 PC방을 택하면서, K-게임 산업과 PC방 업종을 바라보는 시각에 변화가... 아이센스블랙라벨PC존은 25년의 운영 역사를 바탕으로 공정거래위원회 100대 프랜차이즈에 9년 연속 선정된 바...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">조선일보</span></div>
+      <a class="item-title" href="https://biz.chosun.com/it-science/ict/2026/06/09/OY5IWTNHOVGRZMGD5ANV3VW6RE/?utm_source=naver&utm_medium=original&utm_campaign=biz" target="_blank" rel="noopener">[단독] 라이엇게임즈, PC방 ‘리그오브레전드’ 접속 차단에… PC카페조...</a>
+      <p class="item-desc">업계가 공정거래위원회 제소 절차에 착수한다. 라이엇게임즈는 상업적 이용에 따른 정당한 대가라는 입장이지만, 업계는 “서비스 개선은 전혀 이뤄지지 않은 채 국내 PC방 업계에만 추가 비용 부담을 일방적으로...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">cbci.co.kr</span></div>
+      <a class="item-title" href="https://www.cbci.co.kr/news/articleView.html?idxno=580595" target="_blank" rel="noopener">[행정家] 한국소비자원 ③ ㅣ보험·촬영·환불 분쟁 잇따라…일상 속 소...</a>
+      <p class="item-desc">한국소비자원과 공정거래위원회가 사진현상·촬영업계 사업자단체에 권고했다. 이날 간담회에서는 최근... 연령대별로는 10대 이하에서는 '모바일 게임 서비스', 20대는 '헬스장', 30대와 40대는 '항공 여객 운송...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">news1.kr</span></div>
+      <a class="item-title" href="https://www.news1.kr/it-science/mobile/6191550" target="_blank" rel="noopener">애플 시리, 2년만에 똑똑해졌다…앙숙 구글과 맞손</a>
+      <p class="item-desc">사용자의 화면에 표시된 콘텐츠와 관련된 질문에도 답할 수 있다. 별도 전용 시리 앱도 제공한다. 챗GPT나... 한국에서도 비슷한 문제 제기가 이어졌는데 공정거래위원회의 조사 착수에도 애플은 아직 관련 자료를...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">게임포커스</span></div>
+      <a class="item-title" href="https://gamefocus.co.kr/detail.php?number=176444" target="_blank" rel="noopener">게임물관리위원회 '확률형 아이템 피해구제센터' 출범... 김진석 본부장...</a>
+      <p class="item-desc">공정위, 콘분위, 게임위 등 다양한 기관을 통해 민원을 접수할 수 있다. 업무적 편의를 위해 기관과의 협의가 어떻게 진행되는지 궁금하다 행정력 낭비를 막기 위해 접수 단계에서 중복 민원이 접수됐는지를 확인하는...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">이데일리</span></div>
+      <a class="item-title" href="https://www.edaily.co.kr/news/newspath.asp?newsid=02315686645480080" target="_blank" rel="noopener">[마켓인] AI·딥테크에 쏠린 벤처자금…‘무늬만 AI’ 검증 과제로</a>
+      <p class="item-desc">이 기사는 2026년06월08일 18시22분에 마켓인 프리미엄 콘텐츠로 선공개 되었습니다. 인공지능(AI)과 딥테크... 공정위에 따르면 온도 센서로 풍량을 자동 조절하는 냉풍기를 ‘AI 기능’ 제품으로 표시하거나, 습도...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">kmib.co.kr</span></div>
+      <a class="item-title" href="https://www.kmib.co.kr/article/view.asp?arcid=1780908537&code=11151100&cp=nv" target="_blank" rel="noopener">“다시 요리로” 백종원 논란 1년 만에 컴백</a>
+      <p class="item-desc">8일 업계에 따르면 백 대표는 최근 유튜브 채널 ‘백종원’에서 대표 콘텐츠 ‘요리비책’을 재개했다. 지난... 논란의 출발점이었던 연돈볼카츠 가맹점주 매출 허위 고지 의혹도 아직 공정거래위원회 조사가 진행...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">womaneconomy.co.kr</span></div>
+      <a class="item-title" href="https://www.womaneconomy.co.kr/news/articleView.html?idxno=254830" target="_blank" rel="noopener">20년만에 여성 총리 지명···'재산 1위' 한성숙 국회 문턱 넘을까</a>
+      <p class="item-desc">네이버를 검색 서비스 기업에서 콘텐츠·커머스 플랫폼으로 성장시킨 전문경영인으로 일컬어지는 한... 아울러 네이버 대표 시절 불거진 쇼핑·동영상 검색 알고리즘 관련 공정위 과징금 사건(대법원 파기환송)에 대한...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">ekoreanews.co.kr</span></div>
+      <a class="item-title" href="https://www.ekoreanews.co.kr/news/articleView.html?idxno=86434" target="_blank" rel="noopener">태광그룹 거침없는 질주, 신사업 투자·M&A 확대...향후 전망은?</a>
+      <p class="item-desc">◇콘텐츠·커머스 결합으로 B2C 생태계 구축 태광그룹은 최근 미디어 계열사 티캐스트를 T커머스 계열사... ◇공격적 M&A로 체급 확대…재계 순위 11계단 상승 태광그룹의 변화는 공정거래위원회가 발표한 올해 대기업집단...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">newscj.com</span></div>
+      <a class="item-title" href="https://www.newscj.com/news/articleView.html?idxno=3407561" target="_blank" rel="noopener">한성숙, AI 총리 기대 속 의혹 검증 예고</a>
+      <p class="item-desc">네이버 대표 재임 기간에는 콘텐츠·커머스·핀테크 등 플랫폼 사업 확장에 관여했다. 청와대도 한 후보자의... 공정거래위원회는 2020년 네이버가 쇼핑·동영상 검색 알고리즘을 자사 서비스에 유리하게 조정했다며...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">gamevu.co.kr</span></div>
+      <a class="item-title" href="https://www.gamevu.co.kr/news/articleView.html?idxno=58496" target="_blank" rel="noopener">[현장] 게임위, "게임 생태계 위해 처벌보다 합의-신뢰 회복 우선"</a>
+      <p class="item-desc">향후 집단 분쟁화될 경우 콘텐츠분쟁조정위원회(콘분위)로 넘어가고, 더욱 중대한 사안은 공정위로 가는 협업 라인이 구축되어 있다. Q: 다른 곳에 하는 모든 신고가 게임위로 모이게 되나? 김진석 본부장: 그렇지 않다....</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">news.tf.co.kr</span></div>
+      <a class="item-title" href="https://news.tf.co.kr/read/national/2330395.htm" target="_blank" rel="noopener">미국·EU는 낮추는데…구글·애플 앱마켓 수수료 한국만 30%, 왜?</a>
+      <p class="item-desc">비롯해 공정위 등이 적극 나서야 한다"고 말했다. 탤런트 정수환 씨는 "전 세계 게임 유저들이 똑같은 서비스를 이용하는데 우리나라에만 비싼 수수료가 적용되고 있다"며 "이는 단순한 기업만의 문제가 아니라 기업을...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">traveltimes.co.kr</span></div>
+      <a class="item-title" href="https://www.traveltimes.co.kr/news/articleView.html?idxno=415954" target="_blank" rel="noopener">BTS 부산 공연 임박… 관·민, 바가지 잡고 수용태세 '총 점검'</a>
+      <p class="item-desc">공정거래위원회는 재판매 등을 노린 일방적 예약 취소 시 계약금 환급과 함께 숙소 요금의 200%를 추가... 이곳은 종합 관광 안내는 물론 짐 보관 및 배송 서비스, 다채로운 체험 콘텐츠를 모두 갖춘 환대 거점으로...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">news.einfomax.co.kr</span></div>
+      <a class="item-title" href="https://news.einfomax.co.kr/news/articleView.html?idxno=4418674" target="_blank" rel="noopener">[이번주 재정경제부 등 경제부처 일정]</a>
+      <p class="item-desc">13) [공정거래위원회] *6월8일(월) ※2026년 하도급거래 서면실태조사 실시(참고) ※2026년 유통·대리점... 부산콘텐츠 마켓에서 K-콘텐츠 아시아 투자 유치 행사 개최 ※「과기정통부-방미통위 정책협의회」...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">businesspost.co.kr</span></div>
+      <a class="item-title" href="https://www.businesspost.co.kr/BP?command=article_view&num=439292" target="_blank" rel="noopener">[Who Is ?] 윤홍근 제너시스비비큐그룹 회장</a>
+      <p class="item-desc">게임 콘텐츠를 활용한 특화매장도 선보였다. BBQ는 2022년 3월 서울 종로구 그랑서울에 리그오브레전드(LoL)... 공정거래위원회에 따르면 제너시스비비큐는 2018년부터 2021년까지 일부 가맹점주들이 거래조건 개선 등을...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.07</span><span class="item-source">ppss.kr</span></div>
+      <a class="item-title" href="https://www.ppss.kr/news/articleView.html?idxno=298068" target="_blank" rel="noopener">기자에서 총리 후보자까지… 한성숙, 과거 '음란물 유포' 전과 검증대 오...</a>
+      <p class="item-desc">5년간 네이버를 이끌며 웹툰·웹소설 지식재산(IP) 중심의 글로벌 콘텐츠 사업 확장과 자체 초대규모... 공정위는 2020년 네이버가 쇼핑·동영상 검색 알고리즘을 자사 서비스에 유리하게 조정했다며 시정명령과 과징금을...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.07</span><span class="item-source">m.skyedaily.com</span></div>
+      <a class="item-title" href="https://m.skyedaily.com/news_view.html?ID=305381" target="_blank" rel="noopener">메이플플래닛 흑수정 논란… 샌드박스 플랫폼의 난제</a>
+      <p class="item-desc">있었고 공정거래위원회로부터 115억9300만 원의 과징금을 부과받은 바 있다. 메이플스토리 월드는 넥슨 IP를 사용해 게임을 제작할 수 있는 플랫폼이다. 그러나 메이플스토리 월드에서 유료 아이템을 팔아 수익을 올릴 수...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.07</span><span class="item-source">newscj.com</span></div>
+      <a class="item-title" href="https://www.newscj.com/news/articleView.html?idxno=3407297" target="_blank" rel="noopener">李대통령, 새 총리 후보자에 한성숙 지명… '경제·AI 총리' 전면 배치</a>
+      <p class="item-desc">재임 기간 네이버의 콘텐츠·커머스·핀테크 플랫폼 확장에 관여한 전문경영인으로 평가된다. 한 후보자는... 공정거래위원회는 2020년 네이버가 쇼핑·동영상 검색 알고리즘을 자사 서비스에 유리하게 조정했다며...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.06</span><span class="item-source">newswhoplus.com</span></div>
+      <a class="item-title" href="https://www.newswhoplus.com/news/articleView.html?idxno=61526" target="_blank" rel="noopener">정신아號 카카오, 2조 실탄보다 무거운 첫 파업 변수</a>
+      <p class="item-desc">당시 보도에서는 AXZ 인수에 공정위 기업결합 심사가 남아 있었다고 설명했다. 카카오는 보유 중인 AXZ 지분... 업스테이지는 AXZ 인수 후 자체 거대언어모델(LLM) '솔라'를 다음 검색 엔진과 콘텐츠 데이터에 결합하겠다는...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.06</span><span class="item-source">news.einfomax.co.kr</span></div>
+      <a class="item-title" href="https://news.einfomax.co.kr/news/articleView.html?idxno=4418577" target="_blank" rel="noopener">[다음주 재정경제부 등 경제부처 일정]</a>
+      <p class="item-desc">13) [공정거래위원회] *6월8일(월) ※2026년 하도급거래 서면실태조사 실시(참고) ※2026년 유통·대리점... 부산콘텐츠 마켓에서 K-콘텐츠 아시아 투자 유치 행사 개최 ※「과기정통부-방미통위 정책협의회」...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.06</span><span class="item-source">financialpost.co.kr</span></div>
+      <a class="item-title" href="https://www.financialpost.co.kr/news/articleView.html?idxno=261407" target="_blank" rel="noopener">[On Air & Off Script] K-콘텐츠 시장은 열리고, 조건은 스타링크가 쥔다</a>
+      <p class="item-desc">티빙은 아시아태평양 전역에 브랜드관 체계를 구축했으나, 기내에서 어느 앱이 먼저 뜨느냐는 콘텐츠경쟁력이 아니라 번들설계가 결정한다. 티빙·웨이브는 임원 겸임 단계의 기업결합에 대해 공정위의 조건부 승인을...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.05</span><span class="item-source">news2day.co.kr</span></div>
+      <a class="item-title" href="https://www.news2day.co.kr/article/20260605500011" target="_blank" rel="noopener">[재계 인사이드] 그래도 LG가 자동차를 안만드는 이유</a>
+      <p class="item-desc">공정거래위원회가 지난달 발표한 재계순위에서 4위 LG그룹은 자산총액 186조원으로 149조원인 5위... SDV 전환을 위한 차별화 솔루션으로 ‘LG 알파웨어(LG αWare)’, 차량용 webOS 기반 콘텐츠 플랫폼(ACP)을 상용 전기차에...</p>
+    </div></div></div>
+  </div><div class="grid-card" id="section-assembly" style="--card-color:#4F86F7;">
+    <div class="card-header">
+      <div class="card-title-row">
+        <span class="card-emoji">🏛️</span>
+        <h2 class="card-title">문화체육관광위원회</h2>
+        <span class="card-badge" style="background:#4F86F718;color:#4F86F7;border:1px solid #4F86F740;">25건</span>
+      </div>
+      <div class="tabs-bar"><button class="tab-btn active" onclick="switchTab(this,'assembly-news')">보도 25</button></div>
+    </div>
+    <div class="card-body"><div class="tab-pane active" id="assembly-news"><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">jeonmae.co.kr</span></div>
+      <a class="item-title" href="https://www.jeonmae.co.kr/news/articleView.html?idxno=1263723" target="_blank" rel="noopener">조미자 경기도의원, 아기문화예술 정책 국제포럼서 확산 강조</a>
+      <p class="item-desc">경기도의회 문화체육관광위원회 조미자 부위원장(더불어민주당, 남양주3)은 8일 남양주시 정약용도서관에서 열린 「2026 경기 아기문화예술 축제」 국제포럼에 참석해 영아 문화예술 정책 확산의 필요성을 강조했다. 이번...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">weeklytoday.com</span></div>
+      <a class="item-title" href="http://www.weeklytoday.com/news/articleView.html?idxno=779085" target="_blank" rel="noopener">[위클리오늘] 경기도의회 문화체육관광연구회, 문화·체육행사 ESG 접목...</a>
+      <p class="item-desc">경기도의회 문화체육관광연구회는 9일 문화체육관광위원회 회의실에서 '경기도 공공 문화·체육행사의 지속가능한 운영을 위한 ESG 접목 및 실천 방안 개선 연구' 정책연구용역 최종보고회를 개최했다. 이번 연구는...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">seoul.co.kr</span></div>
+      <a class="item-title" href="https://www.seoul.co.kr/news/publicnews/local_govern/kyungki_do/2026/06/09/20260609500191?wlog_tag3=naver" target="_blank" rel="noopener">정동혁 경기도의원, 임기 마지막까지 화수역 신설 촉구</a>
+      <p class="item-desc">경기도의회 문화체육관광위원회 정동혁 의(더불어민주당, 고양3)원이 9일 열린 제391회 정례회 제1차 본회의에서 5분 자유발언을 신청하고, 고양은평선 광역철도 내 ‘화수역’ 신설을 임기 종료 직전까지 강력히 촉구하며...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">jejusori.net</span></div>
+      <a class="item-title" href="https://www.jejusori.net/news/articleView.html?idxno=503783" target="_blank" rel="noopener">12대 의회 마지막 회기, 한진 지하수 증산 제외</a>
+      <p class="item-desc">보건복지위원회는 입양가정 지원 조례나 응급의료 지원 조례 등 안건을 논의하며, 문화관광체육위원회는 전국체전 지원 조례, 제주역사 정립 사업 지원 조례, 소규모학교 소재 통학구역 마을 지원 조례 개정안 등 안건을...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">safetynews.co.kr</span></div>
+      <a class="item-title" href="https://www.safetynews.co.kr/news/articleView.html?idxno=248853" target="_blank" rel="noopener">경기도의회, 제391회 정례회 개회…결산·교육청 추경 심사</a>
+      <p class="item-desc">경제노동위원회, 문화체육관광위원회, 농정해양위원회, 보건복지위원회, 건설교통위원회, 도시환경위원회, 미래과학협력위원회, 교육행정위원회 등이 현장 일정 또는 정책회의를 계획했다. 도의회는 상임위 심사를...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">weeklytoday.com</span></div>
+      <a class="item-title" href="http://www.weeklytoday.com/news/articleView.html?idxno=778998" target="_blank" rel="noopener">[위클리오늘] 조미자 경기도의원, '경기 아기문화예술 축제' 국제포럼서...</a>
+      <p class="item-desc">경기도의회 문화체육관광위원회 조미자 부위원장(더불어민주당, 남양주3)은 8일 남양주시 정약용도서관에서 열린 '2026 경기 아기문화예술 축제' 국제포럼에 참석해 영아 문화예술 정책의 확산 필요성을 강조했다. 이번...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">뉴시스</span></div>
+      <a class="item-title" href="https://www.newsis.com/view/NISX20260609_0003662046" target="_blank" rel="noopener">원구성에 전당대회까지…광주·전남 국회의원 새판짜기</a>
+      <p class="item-desc">(김문수), 문화체육관광위 1명(조계원), 정무위 1명(안도걸), 보건복지위 1명(전진숙) 등이다. 농해수위와 국토위, 행안위, 산자위 등 4개 상임위에 13명(72.2%)이 몰렸다. 반면 국방위를 비롯해 기후에너지환경노동위...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">seoul.co.kr</span></div>
+      <a class="item-title" href="https://www.seoul.co.kr/news/publicnews/local_govern/kyungki_do/2026/06/09/20260609500062?wlog_tag3=naver" target="_blank" rel="noopener">조미자 경기도의원 “영아 문화예술은 삶의 시작부터 누려야 할 권리…...</a>
+      <p class="item-desc">경기도의회 문화체육관광위원회 조미자 부위원장(더불어민주당, 남양주3)은 지난 8일 남양주시 정약용도서관에서 개최된 「2026 경기 아기문화예술 축제」 국제포럼에 참석해 영아 중심 문화예술 정책의 필요성과 확산...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">게임포커스</span></div>
+      <a class="item-title" href="https://gamefocus.co.kr/detail.php?number=176444" target="_blank" rel="noopener">게임물관리위원회 '확률형 아이템 피해구제센터' 출범... 김진석 본부장...</a>
+      <p class="item-desc">국회 문화체육관광위원회 김승수 의원실이 공개한 자료에 따르면 제도 시행(2024년) 후 6개월 동안 2181건에 달하는 위반행위가 적발되고 적발 사례 중 해외 게임사의 위반 건수가 1524건으로 국내 게임사에 약 2.5배에 달하는...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">동아일보</span></div>
+      <a class="item-title" href="https://sports.donga.com/ent/article/all/20260608/134067357/1" target="_blank" rel="noopener">‘군체’ 독주 속 ‘와일드 씽’ 추격… ‘쌍끌이 흥행’에 활력 도는 ...</a>
+      <p class="item-desc">문화체육관광부와 영화진흥위원회는 지난 5월 추경을 통해 확보한 할인권 450만 장 가운데 1차분 225만 장을 배포했다. 주요 극장에서 사용할 수 있는 6000원 할인권이 빠르게 소진되며 관객들의 극장 방문을 이끌었다....</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">imaeil.com</span></div>
+      <a class="item-title" href="https://www.imaeil.com/page/view/2026060817134441867" target="_blank" rel="noopener">TK 후반기 국회 상임위원장 나올까…지역 현안 대응력 높이나</a>
+      <p class="item-desc">지역 재선 의원들 중 김승수 의원(대구 북구을)은 전반기부터 활약했던 문화체육관광위원회를 희망하고 있고, 이인선 의원(대구 수성구을)은 그동안 'TK의 험지'로 꼽혔던 교육위원회를 최우선적으로 지망하고 있다. 두...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">etoday.co.kr</span></div>
+      <a class="item-title" href="https://www.etoday.co.kr/news/view/2591391" target="_blank" rel="noopener">‘군체’ 흥행에 쇼박스 4연타 홈런…5월 영화시장 매출 1126억원</a>
+      <p class="item-desc">8일 본지가 문화체육관광부 산하 영화진흥위원회 영화관입장권통합전산망 수치를 분석한 결과 5월 영화시장 매출액은 1126억원으로 집계됐다. 2월(1185억원)과 3월(1141억원)에 이어 올해 들어 세 번째로 1100억원대를...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">electimes.com</span></div>
+      <a class="item-title" href="https://www.electimes.com/news/articleView.html?idxno=368841" target="_blank" rel="noopener">국회 법제실, '최근 헌재결정과 개정대상 법률 현황' 발간</a>
+      <p class="item-desc">구체적인 위원회별 개정법률 현황을 살펴보면, 행정안전위원회 소관 법률 9건, 법제사법위원회 소관 법률 8건, 보건복지위원회 소관 법률 5건, 정무위원회 소관 법률 2건, 교육위원회·국방위원회·문화체육관광위원회...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">이데일리</span></div>
+      <a class="item-title" href="https://www.edaily.co.kr/news/newspath.asp?newsid=03332486645479752" target="_blank" rel="noopener">칸이 먼저 알아본 나홍진 ‘호프’… 7월 15일 극장가 출격</a>
+      <p class="item-desc">문화체육관광부와 영화진흥위원회는 지난 5월 총 225만 장 규모의 영화관 입장권 할인권을 배포한 데 이어, 여름 성수기인 7월 추가로 225만 장을 배포할 예정이다. CGV·롯데시네마·메가박스 등 주요 멀티플렉스에서 사용할...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">jemin.com</span></div>
+      <a class="item-title" href="https://www.jemin.com/news/articleView.html?idxno=838559" target="_blank" rel="noopener">12대 제주도의회, 9일 마지막 회기…지하수 증산 쟁점</a>
+      <p class="item-desc">문화관광체육위원회는 전국체육대회 지원 조례안과 제주포럼 출연 변경 동의안, 제주대학교 아라복합문화센터 건립·운영 협약 동의안을 심사한다. 제주도는 제21회 제주포럼 특별세션 운영 등을 위해 출연금을...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">news1.kr</span></div>
+      <a class="item-title" href="https://www.news1.kr/industry/distribution/6188950" target="_blank" rel="noopener">8월 영화 유통 지형 바뀌나…'홀드백 협의체' 논의 쟁점은</a>
+      <p class="item-desc">문화체육관광부와 영화진흥위원회는 지난달 29일 서울 중구 영화진흥위원회 기획개발지원센터 '씬원'에서 '한국 영화 유통구조 개선을 위한 민관협의체' 1차 회의를 열었다. 협의체는 8월 중 '한국 영화 상생을 위한...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.07</span><span class="item-source">kyeonggi.com</span></div>
+      <a class="item-title" href="https://www.kyeonggi.com/article/20260607580410" target="_blank" rel="noopener">여야, 상임위원장 배분 본격 논의… 치열한 원구성 한판 대결 예상</a>
+      <p class="item-desc">민주당 일각에선 문화체육관광위원회와 교육위원회 등 일부 상임위와 국민의힘이 위원장을 맡은 재정경제기획위원회 등은 협상을 통해 양보할 수 있다는 목소리도 나온다. 이번 협상 결과는 여야의 국회 주도권 경쟁이...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.07</span><span class="item-source">kwangju.co.kr</span></div>
+      <a class="item-title" href="http://www.kwangju.co.kr/article.php?aid=1780816800799830026" target="_blank" rel="noopener">광주예총 사무처장 안선순 씨 ‘문학춘추’ 제133회 신인작품상 당선</a>
+      <p class="item-desc">광주시 민관협회 문화예술분과위원회, 광주시 시민권익위위원회 문화관광체육분과위원회, 광주시 지속가능발전위원회 문화특별위원회 등에서 위원으로 활동하고 있다.</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.07</span><span class="item-source">kgnews.co.kr</span></div>
+      <a class="item-title" href="https://www.kgnews.co.kr/news/article.html?no=898975" target="_blank" rel="noopener">경기도체육회, 현장 지원 총력 ‘시·군체육회’와 협력 강화</a>
+      <p class="item-desc">체육회는 문화체육관광위원회와 함께 보조금 집행 현황과 사업 성과에 대한 점검을 받으며 투명한 예산 운영과 사업 효율성 제고에 나설 계획이다. 전국 및 도 단위 체육대회 지원도 이어진다. 현재 경남 고성에서는...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.07</span><span class="item-source">idomin.com</span></div>
+      <a class="item-title" href="https://www.idomin.com/news/articleView.html?idxno=2007355" target="_blank" rel="noopener">CGV고성, 경남 유일 '작은영화관 기획전' 공모 선정</a>
+      <p class="item-desc">CGV고성이 문화체육관광부와 영화진흥위원회가 주관하는 '작은영화관 기획전 상영 지원사업' 공모에 최종 선정됐다. 이번 공모는 전국에서 25곳이 지정됐으며, 경남에서는 CGV고성이 유일하게 포함됐다. 공모 선정으로...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.07</span><span class="item-source">한국일보</span></div>
+      <a class="item-title" href="https://www.hankookilbo.com/news/article/A2026060516130000919?did=NA" target="_blank" rel="noopener">활기 찾은 극장가… 6천원 영화 할인권 225만장 효과는?</a>
+      <p class="item-desc">문화체육관광부와 영화진흥위원회가 지난 5월 225만 장 규모의 영화관 입장권 할인권을 배포했다. 멀티플렉스 영화관 CGV, 롯데시네마, 메가박스에서 사용할 수 있도록 1인당 2매씩 지급됐다. 추경을 통해 확보한 이번...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.05</span><span class="item-source">biz.heraldcorp.com</span></div>
+      <a class="item-title" href="https://biz.heraldcorp.com/article/10764582?ref=naver" target="_blank" rel="noopener">‘李대통령 방’ 818호에 송영길 입성…친한계 의원방 옆에 둥지 튼 한...</a>
+      <p class="item-desc">윤용근 의원은 지역구를 하나의 생활·경제·문화권으로 묶는 ‘백제금강벨트 경제지원특별법’ 추진을 공약한 만큼 문체위를 희망하는 것으로 알려졌다. 변호사 출신인 만큼 법사위 가능성도 제기된다. 이번 재보선으로...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.05</span><span class="item-source">news.sbs.co.kr</span></div>
+      <a class="item-title" href="https://news.sbs.co.kr/news/endPage.do?news_id=N1008596487&plink=ORI&cooper=NAVER" target="_blank" rel="noopener">'이 대통령 방' 받은 송영길…친한계와 한 층서 둥지 튼 한동훈</a>
+      <p class="item-desc">윤용근(충남 공주·부여·청양) 의원은 지역구를 하나의 생활·경제·문화권으로 묶는 '백제금강벨트 경제지원특별법' 추진을 공약한 만큼 문체위를 희망하는 것으로 알려졌습니다. 변호사 출신인 만큼 법사위 가능성도...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.05</span><span class="item-source">jnilbo.com</span></div>
+      <a class="item-title" href="https://www.jnilbo.com/news/articleView.html?idxno=90000040150" target="_blank" rel="noopener">'李대통령 방' 받은 송영길…친한계와 한층서 둥지 튼 한동훈</a>
+      <p class="item-desc">윤용근(충남 공주·부여·청양) 의원은 지역구를 하나의 생활·경제·문화권으로 묶는 '백제금강벨트 경제지원특별법' 추진을 공약한 만큼 문체위를 희망하는 것으로 알려졌다. 변호사 출신인 만큼 법사위 가능성도...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.05</span><span class="item-source">연합뉴스</span></div>
+      <a class="item-title" href="https://www.yna.co.kr/view/AKR20260605069900001?input=1195m" target="_blank" rel="noopener">'李대통령 방' 받은 송영길…친한계와 한층서 둥지 튼 한동훈</a>
+      <p class="item-desc">윤용근(충남 공주·부여·청양) 의원은 지역구를 하나의 생활·경제·문화권으로 묶는 '백제금강벨트 경제지원특별법' 추진을 공약한 만큼 문체위를 희망하는 것으로 알려졌다. 변호사 출신인 만큼 법사위 가능성도...</p>
+    </div></div></div>
+  </div></div>
+    <section class="full-section" id="section-industry">
+    <div class="full-section-header" style="--card-color:#0EA5E9;">
+      <div class="card-title-row">
+        <span class="card-emoji">📰</span>
+        <h2 class="card-title">업계 뉴스</h2>
+        <span class="card-badge" style="background:#0EA5E918;color:#0EA5E9;border:1px solid #0EA5E940;">146건</span>
+      </div>
+    </div>
+    <div class="full-section-body news-columns"><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">etoday.co.kr</span></div>
+      <a class="item-title" href="https://www.etoday.co.kr/news/view/2591957" target="_blank" rel="noopener">‘붉은사막’ 흥행 펄어비스, 첫 배당 실시</a>
+      <p class="item-desc">9일 펄어비스가 공시한 주주환원 정책 계획에 따르면 펄어비스는 주주가치 제고를 위해 연간 100억원과... 펄어비스는 “라이브 서비스 게임의 경쟁력을 강화하고 신작 개발 및 기술력을 바탕으로 기업가치를 높일...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">100ssd.co.kr</span></div>
+      <a class="item-title" href="https://www.100ssd.co.kr/news/articleView.html?idxno=210002" target="_blank" rel="noopener">건보공단, '2026 서울헬스쇼'서 홍보부스 운영</a>
+      <p class="item-desc">또한 공단의 유튜브와 사회관계망서비스(SNS) 채널 구독 행사, 건강 게임 이벤트 등 시민들이 직접 참여할 수... 기업·소비자 거래(B2C) 중심의 건강관리 축제로 헬스케어, 웰니스 등 건강관리 제품 및 서비스 관련 최신...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">newsworker.co.kr</span></div>
+      <a class="item-title" href="http://www.newsworker.co.kr/news/articleView.html?idxno=430444" target="_blank" rel="noopener">펄어비스, 주주환원 정책 발표 내용은?</a>
+      <p class="item-desc">1,000억원 규모의 자사주를 추가 매입할 계획도 밝혔다. 펄어비스는 주주환원 정책과 함께 라이브 서비스 게임의 경쟁력을 지속적으로 강화하는 한편, 신작 개발과 기술력 확보를 통해 기업가치 향상에 나설 방침이다.</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">youthdaily.co.kr</span></div>
+      <a class="item-title" href="https://www.youthdaily.co.kr/news/article.html?no=220550" target="_blank" rel="noopener">펄어비스, 창사 이래 '첫 배당' 실시…1천500억 규모 자사주 소각·매입</a>
+      <p class="item-desc">주주환원 정책을 구체화했다. 지난 3월 정기 주주총회에서 밝힌 기업가치 제고 방향에 따른 후속 조치다.... 이 밖에도 펄어비스는 라이브 서비스 게임의 경쟁력을 강화하는 한편, 신작 개발 및 기술력을 바탕으로...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">hbnpress.com</span></div>
+      <a class="item-title" href="https://hbnpress.com/news/view/1065596982993527" target="_blank" rel="noopener">펄어비스, ‘붉은사막’ 흥행에 첫 배당까지</a>
+      <p class="item-desc">국산 콘솔 게임으로는 이례적인 글로벌 성과를 낸 가운데 실적 개선 흐름을 기업가치 제고 정책으로 연결하는 모습이다. 펄어비스는 9일 주주환원 정책 계획을 공시했다. 이번 계획은 지난 3월 정기 주주총회에서 밝힌...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">breaknews.com</span></div>
+      <a class="item-title" href="http://www.breaknews.com/1212958" target="_blank" rel="noopener">중부권 최대 콘텐츠 축제 ‘2026 대전콘텐츠페어’, 오는 10월 막 올린다...</a>
+      <p class="item-desc">등 정책과 비즈니스를 아우르는 연계 행사들이 쉼 없이 이어진다. 새롭게 도입되는 프로그램도 기대를 모은다. 올해 처음 선보이는 ‘제1회 대한민국 기능성게임...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">khgames.co.kr</span></div>
+      <a class="item-title" href="https://www.khgames.co.kr/news/articleView.html?idxno=305190" target="_blank" rel="noopener">펄어비스, 첫 배당 및 자사주 소각·매입 계획 발표</a>
+      <p class="item-desc">펄어비스가 9일 첫 배당과 자사주 소각 및 매입을 포함한 주주환원 정책 계획을 공시했다. 회사 측은... 한편, 펄어비스는 라이브 서비스 게임의 경쟁력을 지속 강화하는 한편, 신작 개발 및 기술력을 바탕으로...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">news.unn.net</span></div>
+      <a class="item-title" href="https://news.unn.net/news/articleView.html?idxno=593236" target="_blank" rel="noopener">[라이즈 선도대학을 가다/대구교육대학교] RISE 사업으로 지역 교육인재...</a>
+      <p class="item-desc">대구교육대는 2026년 1~2월 대구 관내 초등학교에서 기후환경, 보드게임, 신체놀이, 블록놀이, 창의융합 등... 프로그램은 '교실에서 연구실로', '학교에서 정책으로', '교사에서 스타트업으로'를 주제로 진행됐으며...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">daily.hankooki.com</span></div>
+      <a class="item-title" href="https://daily.hankooki.com/news/articleView.html?idxno=1374934" target="_blank" rel="noopener">펄어비스, 기업가치 제고 계획 공개…첫 배당·자사주 소각 및 매입</a>
+      <p class="item-desc">사진=펄어비스 제공 펄어비스는 '첫 배당'과 '자사주 소각 및 매입'을 포함한 주주환원 정책 계획을 9일... 펄어비스는 라이브 서비스 게임의 경쟁력을 강화하고, 신작 개발 및 기술력을 바탕으로 기업가치를 높일...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">경향신문</span></div>
+      <a class="item-title" href="https://sports.khan.co.kr/article/202606091607003?pt=nv" target="_blank" rel="noopener">펄어비스 ‘첫 배당·자사주 소각 및 매입’···기업가치제고 계획 발...</a>
+      <p class="item-desc">펄어비스가 창사후 ‘첫 배당’과 ‘자사주 소각 및 매입’을 포함한 주주환원 정책 계획을 9일... 펄어비스는 라이브 서비스 게임의 경쟁력을 강화하는 한편, 신작 개발 및 기술력을 바탕으로 기업가치를 높일...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">dt.co.kr</span></div>
+      <a class="item-title" href="https://www.dt.co.kr/article/12066670?ref=naver" target="_blank" rel="noopener">펄어비스, 540억 규모 자사주 소각</a>
+      <p class="item-desc">9일 펄어비스가 공시한 주주환원 정책 계획에 따르면 펄어비스는 주주가치 제고를 위해 연간 100억원과... 펄어비스는 라이브 서비스 게임의 경쟁력을 강화하는 한편, 신작 개발 및 기술력을 바탕으로 기업가치를...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">gamechosun.co.kr</span></div>
+      <a class="item-title" href="https://www.gamechosun.co.kr/webzine/article/view.php?no=222543" target="_blank" rel="noopener">"젠슨 황도 치킨이닭!" 크래프톤 장병규 의장의 선물 보따리에 유저 '환...</a>
+      <p class="item-desc">이날 행사장을 찾은 젠슨 황 CEO는 "엔비디아의 지포스와 한국은 함께 성장해왔다", "e스포츠는 한국의 위대한 수출품"이라고 말하며 이용자들과 직접 만났다. 그 역시 빈손으로 방문하지 않았다. 엔비디아의 최신...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">megaeconomy.co.kr</span></div>
+      <a class="item-title" href="https://www.megaeconomy.co.kr/news/newsview.php?ncode=1065596545247823" target="_blank" rel="noopener">펄어비스, 첫 배당·자사주 소각 본격화…“주주환원 강화 기업가치 제...</a>
+      <p class="item-desc">펄어비스가 창사 이후 첫 배당 정책을 도입하고 대규모 자사주 소각 및 매입에 나서며 본격적인 주주가치... 펄어비스는 차세대 게임 엔진 고도화와 AI 기반 개발 자동화 기술 도입을 통해 개발 효율성을 높이고 게임...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">동아일보</span></div>
+      <a class="item-title" href="https://game.donga.com/122892/" target="_blank" rel="noopener">[인터뷰] ‘월탱 히트’로 돌아온 워게이밍 "한국 이용자들 반응 기대된...</a>
+      <p class="item-desc">Q: e스포츠 가능성은 어떻게 염두하고 있는지? A: 월드 오브 워쉽에서 활발한 토너먼트 환경을 지원했던 경험이 있다. 월탱: 히트에서도 비슷한 접근 방식을 취할 생각이다. 게임에 e스포츠를 억지로 도입하는 것은 매우...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">ddaily.co.kr</span></div>
+      <a class="item-title" href="https://www.ddaily.co.kr/page/view/2026060915584025457" target="_blank" rel="noopener">AI 실전 활용부터 개발 철학까지…'NDC 26' 어떤 세션 열리나</a>
+      <p class="item-desc">이후 게임산업 전반의 동반 성장을 도모하는 행사로 자리매김했다. 올해 NDC의 핵심 화두는 AI다. 전체 51개 세션 중 15개가 AI 관련 주제로 마련돼 급변하는 기술 환경 속에서 게임 개발에 AI를 접목한 최신 사례와 실무...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">news.mtn.co.kr</span></div>
+      <a class="item-title" href="https://news.mtn.co.kr/news-detail/2026060915045270367" target="_blank" rel="noopener">LS일렉트릭 "고효율 직류 배전으로 북미 수요 대응" [한호포럼2026]</a>
+      <p class="item-desc">DC 배전은 전력 변환 과정에서 발생하는 손실을 줄일 수 있어 차세대 전력 산업의 게임체인저로 꼽힌다. 실제 데이터센터 등 대규모 전력 수요처에서 관심이 높아지고 있다. 북미를 중심으로 자체적으로 전력을 생산...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">ibabynews.com</span></div>
+      <a class="item-title" href="https://www.ibabynews.com/news/articleView.html?idxno=151917" target="_blank" rel="noopener">[청소년뉴스] 부산 청소년지도자·예비청소년지도자, 대한민국청소년박...</a>
+      <p class="item-desc">'청소년뉴스'는 청소년의 삶과 성장에 영향을 미치는 정책과 사회 이슈를 전하기 위해 기획된 코너다.... 『위기를 예방하고 미래를 잇다』마포경찰서의 위드 유(With You) 프로그램 참여는 약물 오·남용, 인터넷·게임...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">financialpost.co.kr</span></div>
+      <a class="item-title" href="https://www.financialpost.co.kr/news/articleView.html?idxno=262022" target="_blank" rel="noopener">국민건강보험공단, '2026 서울헬스쇼'서 홍보부스 운영</a>
+      <p class="item-desc">기업·소비자 거래(B2C) 중심 건강 축제다. 올해 행사에는 다양한 기관과 기업이 참여해 참관객을 맞이하고... 공단 공식 유튜브와 사회관계망서비스(SNS) 채널 구독 이벤트, 건강 게임 등이 행사장 안에서 진행된다....</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">동아일보</span></div>
+      <a class="item-title" href="https://game.donga.com/122891/" target="_blank" rel="noopener">2026 NDC의 기대감 3가지</a>
+      <p class="item-desc">[AI로 인해 변화한 게임 산업 집중조명] AI가 게임 산업의 핵심 화두로 떠오른 가운데, 올해 NDC에서는 AI가 실제 게임 개발 현장과 기업 조직을 어떻게 바꾸고 있는지 다루는 세션들이 마련됐다. 단순히 새로운 기술을...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">dizzotv.com</span></div>
+      <a class="item-title" href="https://www.dizzotv.com/site/data/html_dir/2026/06/09/2026060980136.html" target="_blank" rel="noopener">펄어비스, '첫 배당' '자사주 소각 및 매입' 등 기업가치 올린다</a>
+      <p class="item-desc">펄어비스가 '첫 배당'과 '자사주 소각 및 매입'을 포함한 주주환원 정책 계획을 9일 공시했다. 이번... 펄어비스는 라이브 서비스 게임의 경쟁력을 강화하는 한편, 신작 개발 및 기술력을 바탕으로 기업가치를 높일...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">viva100.com</span></div>
+      <a class="item-title" href="https://www.viva100.com/article/20260609500916" target="_blank" rel="noopener">펄어비스, 기업가치제고 계획 발표⋯ “첫 배당·자사주 소각 및 매입”</a>
+      <p class="item-desc">펄어비스가 ‘첫 배당’과 ‘자사주 소각 및 매입’을 포함한 주주환원 정책 계획을 9일 공시했다. 이번... 펄어비스 관계자는 “라이브 서비스 게임의 경쟁력을 강화하는 한편, 신작 개발 및 기술력을 바탕으로...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">kpenews.com</span></div>
+      <a class="item-title" href="https://kpenews.com/View.aspx?No=4105978" target="_blank" rel="noopener">펄어비스, 첫 배당 나서..기업가치제고 계획 발표</a>
+      <p class="item-desc">펄어비스는 배당과 자사주 소각 및 매입을 포함한 주주환원 정책 계획을 9일 공시했다. 이번 계획은... 펄어비스는 라이브 서비스 게임의 경쟁력을 강화하고 신작 개발 및 기술력을 바탕으로 기업가치를 높일...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">the-biz.co.kr</span></div>
+      <a class="item-title" href="http://www.the-biz.co.kr/news/articleView.html?idxno=722234" target="_blank" rel="noopener">국무회의 통과한 '철강특별법'… 고철 대란 속 생존 물꼬</a>
+      <p class="item-desc">9일 철강업계에 따르면 글로벌 환경 규제 대응을 위해 탄소 배출이 적은 전기로 도입이 가속화되는 가운데... 생존 게임"이라며 "정부의 제도적 기반이 마련된 만큼 구매 채널 다변화와 공급망 고도화에 성공하는 기업이...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">news1.kr</span></div>
+      <a class="item-title" href="https://www.news1.kr/politics/general-politics/6192102" target="_blank" rel="noopener">[인터뷰 전문] 2030 보수화? 30대 정치인들 "분석하려 하지마"</a>
+      <p class="item-desc">더불어민주당 정책위 부의장, 백지원 전 국민의힘 선대위 대변인 오세훈 당선 변수 2030…"정원오 인물 경쟁력... 그리고 지금 그간에 보게 되면은 게임 채팅이라든가 커뮤니티라든가 그 밖에 이런 어떤 음지의 굉장히...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">gamechosun.co.kr</span></div>
+      <a class="item-title" href="https://www.gamechosun.co.kr/webzine/article/view.php?no=222541" target="_blank" rel="noopener">넷마블 엠엔비, 일본 최대 규모 콘텐츠 박람회 ‘콘텐츠 도쿄 2026’ 참가</a>
+      <p class="item-desc">최근 비게임 서비스에 게임 요소를 접목해 소비자 경험과 참여도를 높이는 게이미피케이션 기반 컨설팅을 확대하는 한편, 브랜드 마스코트를 중심으로 팬덤을 확장하는 캠페인 서비스도 강화하고 있다.</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">게임메카</span></div>
+      <a class="item-title" href="https://www.gamemeca.com/mv.php?inflow=naver_s&gid=1776233" target="_blank" rel="noopener">[왕좌의 게임 꿀팁] 세트 효과 선택, 고민할 필요 없다</a>
+      <p class="item-desc">적에게 맞아야만 효과가 발동하는데, 피격을 최소화하는 게임 플레이 방향과 맞지 않기 때문이다. 그러니 수호자는 3세트 2개로 세트 효과를 구성할 때만 고려하자. ▲ 모든 장비를 전설 등급으로 착용한 28랭크 수호자...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">eroun.net</span></div>
+      <a class="item-title" href="https://www.eroun.net/news/articleView.html?idxno=82726" target="_blank" rel="noopener">아이센스블랙라벨PC존, PC방창업 시장서 차별화된 운영 모델 제시</a>
+      <p class="item-desc">엔비디아 최고경영자 젠슨 황 방한으로 재조명되는 PC방창업 이로운넷 = 이승재 기자 젠슨 황 엔비디아 최고경영자(CEO)가 이번 방한 일정 중 국내 주요 게임사 경영진과의 회동 장소로 PC방을 택하면서, K-게임 산업과 PC방...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">sportsworldi.com</span></div>
+      <a class="item-title" href="https://www.sportsworldi.com/newsView/20260609512938" target="_blank" rel="noopener">‘쿵야 레스토랑즈’ 日 간다…넷마블 엠엔비, 콘텐츠 도쿄 2026 참가</a>
+      <p class="item-desc">한편 엠엔비는 소비자 및 미디어 트렌드 분석을 기반으로 통합 마케팅 커뮤니케이션(IMC) 서비스를 제공하는 넷마블 자회사다. IP 사업과 함께 비게임 서비스에 게임적 요소를 접목하는 게이미피케이션 컨설팅, 브랜드...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">consumuch.com</span></div>
+      <a class="item-title" href="https://www.consumuch.com/news/articleView.html?idxno=78272" target="_blank" rel="noopener">큐닉스, 브랜드 개편…첫 신제품 'CORE MG32B 280' 출시</a>
+      <p class="item-desc">PURE 시리즈는 사무용 및 일반 사용자 중심의 제품군으로 구성되며, CORE 시리즈는 게임 성능과... 서희원 대표는 "브랜드 개편을 통해 제품 성격과 성능을 소비자가 직관적으로 이해할 수 있게 됐다"며...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">the-pr.co.kr</span></div>
+      <a class="item-title" href="https://www.the-pr.co.kr/news/articleView.html?idxno=61540" target="_blank" rel="noopener">건보공단, 서울헬스쇼 참가…건강보험·장기요양보험 체험형 홍보</a>
+      <p class="item-desc">또한 공단의 유튜브와 사회관계망서비스(SNS) 채널 구독 행사, 건강 게임 이벤트 등 시민들이 직접 참여할 수... 기업‧소비자 거래(B2C) 중심의 건강관리 축제로, 헬스케어, 웰니스 등 건강관리 제품 및 서비스 관련 최신...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">youthdaily.co.kr</span></div>
+      <a class="item-title" href="https://www.youthdaily.co.kr/news/article.html?no=220546" target="_blank" rel="noopener">최후의 예언자 '말쿠트'와 최종 결전…넥슨 '블루 아카이브', 메인 스토...</a>
+      <p class="item-desc">서브컬처 게임 '블루 아카이브'가 마침내 베일에 싸여있던 최후의 예언자 '말쿠트'와의 결전을 공개하며... 최고 등급 '오파츠' 등의 드롭 보상을 기존의 3배로 대거 획득할 수 있다. 이어 16일부터 23일까지는 '학원교류회...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">thefirstmedia.net</span></div>
+      <a class="item-title" href="http://www.thefirstmedia.net/news/articleView.html?idxno=200875" target="_blank" rel="noopener">여신티켓, 오프라인 마케팅 연계 '2026 무도런' 브랜드 부스 가동 성료</a>
+      <p class="item-desc">대상으로 인앱 인프라 유입을 유도하는 전용 할인 쿠폰 3종을 발급했다. 배정된 권종은 각각 1만 원, 3만 원, 5만 원 상당으로 구성되었으며, 현장 수령 후 여신티켓 애플리케이션 내에서 결제에 적용할 수 있는 사양을...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">gukjenews.com</span></div>
+      <a class="item-title" href="https://www.gukjenews.com/news/articleView.html?idxno=3603826" target="_blank" rel="noopener">엠엔비, 콘텐츠 도쿄 2026 참가…글로벌 파트너십 모색</a>
+      <p class="item-desc">엠엔비는 넷마블의 자회사로, 소비자와 미디어 트렌드 분석을 기반으로 통합 마케팅 커뮤니케이션(IMC) 솔루션과 IP 사업을 전개하고 있다. 최근에는 게임 요소를 비게임 서비스에 접목한 게이미피케이션 컨설팅과...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">ddaily.co.kr</span></div>
+      <a class="item-title" href="https://www.ddaily.co.kr/page/view/2026060915325925348" target="_blank" rel="noopener">유니티, 7월21일 '유나이트 서울 2026' 개최…AI·그래픽 기술 로드맵 공...</a>
+      <p class="item-desc">게임 외 산업 분야 세션도 진행된다. 삼성중공업과 한국생산기술연구원(KITECH)이 연사로 참여하며 일본 자동차 기업들의 인간·기계 인터페이스(HMI) 양산 사례와 기술 경험도 소개된다. 현장에는 역대 최대 규모의 핸즈온...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">weeklytoday.com</span></div>
+      <a class="item-title" href="http://www.weeklytoday.com/news/articleView.html?idxno=778853" target="_blank" rel="noopener">[위클리오늘] 넷마블 소식(6.9)</a>
+      <p class="item-desc">회사는 오는 7월 미국 로스앤젤레스에서 열리는 애니메 엑스포 2026에 참가해 게임의 주요 콘텐츠를 공개할... 향후 현지 소비자 특성에 맞춘 마케팅과 다양한 협력 사업도 추진할 계획이다. 배민호 엠엔비 대표는 "쿵야...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">straightnews.co.kr</span></div>
+      <a class="item-title" href="https://www.straightnews.co.kr/news/articleView.html?idxno=304413" target="_blank" rel="noopener">"한 빵에 성공" 치킨·맥주·굿즈 총출동...유통가 '월드컵 응원' 전면전</a>
+      <p class="item-desc">[사진=SPC] 파리바게뜨는 미국 MLS 구단 LAFC와 협업한 K-게임 영상을 공개하며 스포츠와 K컬처의 접점을 넓혔다.... 음식과 굿즈, 디지털 참여를 결합해 소비자의 체험을 확장하고 경기 일정에 맞춘 촘촘한 프로모션으로 구매...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">sisunnews.co.kr</span></div>
+      <a class="item-title" href="http://www.sisunnews.co.kr/news/articleView.html?idxno=240192" target="_blank" rel="noopener">비엔엠큐닉스, 게이밍모니터 신제품 'CORE MG32B 280' 출시</a>
+      <p class="item-desc">'PURE 시리즈'는 사무용 및 일반 사용자 중심의 제품군이며, 'CORE 시리즈'는 게임 성능과 가격... 성능을 소비자가 직관적으로 이해할 수 있도록 하기 위한 전략적 리브랜딩"이라며 "CORE MG32B 280을...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">popcornnews.net</span></div>
+      <a class="item-title" href="http://www.popcornnews.net/news/articleView.html?idxno=123334" target="_blank" rel="noopener">[POP!대학가] 고려대 연구팀, 어려운 문서도 누구나 쉽게 이해하도록 요...</a>
+      <p class="item-desc">연구와 정책 제안을 더욱 심화해 나갈 계획이다. 한편, 이날 행사에는 고삼석 동국대 AI융합원 석좌교수... 2게임 동안 1대 1 무승부를 기록하며 승패를 넘어선 화합과 우정의 장을 만들어냈다. 경기에 참여한 중앙대...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">nownews.seoul.co.kr</span></div>
+      <a class="item-title" href="https://nownews.seoul.co.kr/news/newsView.php?id=20260609601013&wlog_tag3=naver" target="_blank" rel="noopener">소비자용 DDR5 메모리 혁신 ‘CUDIMM 메모리’가 온다 [고든 정의 TECH+]</a>
+      <p class="item-desc">하지만 그만큼 주목받진 못해도 여러 제조사가 소비자용 PC 부문에서 조용한 혁신을 예고한... 게임처럼 반응 속도가 중요한 애플리케이션에서 매우 중요한 요소입니다. 반면 서버용 RDIMM은 CPU와 DRAM 사이에...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">smartbizn.com</span></div>
+      <a class="item-title" href="https://www.smartbizn.com/news/articleView.html?idxno=145789" target="_blank" rel="noopener">[스테디Biz] "국민에게 단백질을"··· 42년간 식탁 지킨 '동원참치'</a>
+      <p class="item-desc">서울올림픽과 아시안게임 이후 경제가 성장하면서 국민소득이 높아졌고, 동원은 야채참치와 고추참치 등... 동원F&B는 지난해부터 방탄소년단(BTS) 진을 브랜드 모델로 발탁하며 글로벌 소비자 공략에 나섰다. 배경에는...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">ksilbo.co.kr</span></div>
+      <a class="item-title" href="https://www.ksilbo.co.kr/news/articleView.html?idxno=1058956" target="_blank" rel="noopener">비엔엠큐닉스, 게이밍모니터 신제품 'CORE MG32B 280' 공개</a>
+      <p class="item-desc">PURE 시리즈는 사무용 및 일반 사용자 중심의 제품군으로 구성되며, CORE 시리즈는 게임 성능과 가격... 서희원 대표는 "이번 브랜드 개편은 단순한 제품명 변경이 아닌 제품 성격과 성능을 소비자가...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">handmk.com</span></div>
+      <a class="item-title" href="https://www.handmk.com/news/articleView.html?idxno=40102" target="_blank" rel="noopener">B2B와 B2C를 아우르는 IT 전문 플랫폼의 진화 - 가이드컴 김진환 대표</a>
+      <p class="item-desc">크래프톤 같은 메이저 게임 개발사들이 주요 거래처로, 쿠팡이나 오픈마켓이 넘볼 수 없는 전문 영역을... 대기업은 자금력이 있어 물류 자동화나 AI 기능에 과감히 투자할 수 있지만, 중소기업이 연구개발에 나서면 규제...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">ddaily.co.kr</span></div>
+      <a class="item-title" href="https://www.ddaily.co.kr/page/view/2026060915015939805" target="_blank" rel="noopener">콘진원, K-게임 북유럽 진출 지원…'노르딕게임'서 2720억원 상담</a>
+      <p class="item-desc">노르딕게임은 북유럽 게임산업 관계자와 글로벌 시장을 연결하는 행사다. 올해는 전 세계 산업 관계자 3000여명이 참가해 전시·수출 상담·투자 유치 프로그램 등을 진행했다. 공동관 참가 기업 가운데 아시아 기업은...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">pointe.co.kr</span></div>
+      <a class="item-title" href="https://www.pointe.co.kr/news/articleView.html?idxno=80435" target="_blank" rel="noopener">위메이드 '나이트 크로우', Q&A 통해 향후 업데이트 방향 공개</a>
+      <p class="item-desc">나이트 크로우는 언리얼 엔진 5를 활용한 고화질 그래픽과 중세 유럽을 재해석한 세계관이 특징인 게임이다.... 이에 더해 전설 등급 기술의 획득 경로를 넓히고 홀로 즐길 수 있는 콘텐츠를 늘려달라는 이용자들의...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">ZDNet Korea</span></div>
+      <a class="item-title" href="https://zdnet.co.kr/view/?no=20260609151250" target="_blank" rel="noopener">콘진원, '韓 게임' 노르딕게임 2026 참가 지원…1억 8000만 달러 수출 상...</a>
+      <p class="item-desc">노르딕 게임은 북유럽 지역 게임 산업과 글로벌 시장을 연결하는 대표적인 행사로 올해는 지난 달 26일부터 29일까지 진행되며 전 세계 3000여 명의 관계자가 참가해 전시와 투자 유치 프로그램 등을 진행했다. 콘진원...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">kmib.co.kr</span></div>
+      <a class="item-title" href="https://www.kmib.co.kr/article/view.asp?arcid=0029942913&code=61162012&cp=nv" target="_blank" rel="noopener">‘케리아’의 바드를 풀 것인가?</a>
+      <p class="item-desc">한화생명e스포츠와 T1, 젠지, KT 롤스터 중 2026 미드 시즌 인비테이셔널(MSI)에 진출하는 건 어느 팀일까. 로드 투 MSI의 최종장이 오는 12일부터 15일까지 강원도 원주 DB프로미 아레나에서 열린다. 두 팀 다 미드·정글은 굳건...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">beyondpost.co.kr</span></div>
+      <a class="item-title" href="http://www.beyondpost.co.kr/view.php?ud=2026060915051660529aeda69934_30" target="_blank" rel="noopener">하트티라미수 X 헬로키티, 잠실 롯데월드몰 팝업 전개</a>
+      <p class="item-desc">제품 구매 시 소비자가 직접 디저트를 꾸밀 수 있도록 초코펜과 판박이 스티커가 함께 동봉되는 것이 특징이다. 현장에서는 방문객들이 참여할 수 있는 ‘헬로키티 해머 GAME!’ 이벤트가 진행된다. 게임 결과에 따라 경품...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">이데일리</span></div>
+      <a class="item-title" href="https://www.edaily.co.kr/news/newspath.asp?newsid=04293526645480080" target="_blank" rel="noopener">"전기트럭 넘어 무인물류로"… 테슬라 '세미', 상용차 자율주행 앞당길...</a>
+      <p class="item-desc">탄소배출 감축이라는 환경 규제 요건을 충족하는 동시에, 만성적인 화물 운전 인력 부족 문제도 자율주행... 가지 과제를 동시에 풀 수 있다는 점에서 전기트럭이 진정한 ‘게임체인저’가 될 수 있을 것”이라고 예상했다.</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">newspim.com</span></div>
+      <a class="item-title" href="https://www.newspim.com/news/view/20260609001019" target="_blank" rel="noopener">[미국 특징주] 우버, 런던 로보택시 서비스 앞두고 대기자 명단 개설</a>
+      <p class="item-desc">해당 자율주행차는 카메라와 레이더 센서, 영국 웨이브가 개발한 자율주행 소프트웨어를 탑재한 전기 포드 머스탱 마하-E 스포츠유틸리티차량(SUV)이다. 초기에는 면허를 보유한 운영자가 차량 안에서 감독을 맡지만...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">hansbiz.co.kr</span></div>
+      <a class="item-title" href="http://www.hansbiz.co.kr/news/articleView.html?idxno=843188" target="_blank" rel="noopener">[ESG포커스] 코웨이, 소수주주 울리는 지배구조 리스크</a>
+      <p class="item-desc">당시 게임 퍼블리싱 등에 자금을 사용하겠다던 IPO 약속을 저버리고 전혀 관련 없는 가전 렌털 회사를... 사외이사로 교체하고 자본비용을 고려한 공격적인 주주환원 및 레버리지 정책을 명문화할 필요가 있다"고 조언했다.</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">kmib.co.kr</span></div>
+      <a class="item-title" href="https://www.kmib.co.kr/article/view.asp?arcid=0029942840&code=61151111&cp=nv" target="_blank" rel="noopener">넷마블 엠엔비, ‘콘텐츠 도쿄 2026’ 참가</a>
+      <p class="item-desc">최근 비게임 서비스에 게임 요소를 접목해 소비자 경험과 참여도를 높이는 게이미피케이션 기반 컨설팅을 확대하는 한편 브랜드 마스코트를 중심으로 팬덤을 확장하는 캠페인 서비스도 강화하고 있다 엠엔비는...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">koreastocknews.com</span></div>
+      <a class="item-title" href="http://www.koreastocknews.com/news/articleView.html?idxno=118973" target="_blank" rel="noopener">비엔엠큐닉스, 게이밍모니터 신제품 라인업 공개</a>
+      <p class="item-desc">PURE 시리즈는 사무용 및 일반 사용자 중심의 제품군으로 구성되며, CORE 시리즈는 게임 성능과 가격... 성능을 소비자가 직관적으로 이해할 수 있도록 하기 위한 전략적 리브랜딩"이라며 "CORE MG32B 280을...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">popcornnews.net</span></div>
+      <a class="item-title" href="http://www.popcornnews.net/news/articleView.html?idxno=123347" target="_blank" rel="noopener">'치맥·야식' 가고 '집관·오전 응원' 뜬다...북중미 월드컵 시차 장벽에...</a>
+      <p class="item-desc">업계 또한 이러한 변화에 맞춰 단순 할인보다 소비자 참여를 유도하는 체험형 마케팅을 강화하는 모습이다.... 포토존과 축구 게임, 선수 사인 각인 캔 체험 등을 마련하고, 주요 상권의 대형 펍을 '카스 뷰잉펍'으로...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">eroun.net</span></div>
+      <a class="item-title" href="https://www.eroun.net/news/articleView.html?idxno=82722" target="_blank" rel="noopener">넷마블 자회사 엠엔비, 일본 최대 콘텐츠 전시회 참가…'쿵야 레스토랑...</a>
+      <p class="item-desc">한편 엠엔비는 소비자와 미디어 트렌드 분석을 기반으로 통합 마케팅 커뮤니케이션(IMC) 서비스를 제공하는 넷마블의 콘텐츠 마케팅 자회사다. 최근에는 비게임 분야에 게임 요소를 접목한 게이미피케이션 컨설팅 사업과...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">동아일보</span></div>
+      <a class="item-title" href="https://game.donga.com/122888/" target="_blank" rel="noopener">마브렉스, 블록체인 웹3 게임 컨퍼런스에서 스테이블코인 결제 전략 공...</a>
+      <p class="item-desc">발표에서는 글로벌 결제 시장에서 빠르게 영향력을 확대하고 있는 달러 기반 스테이블코인 동향을 분석하고, 국내 게임 산업에서 원화 스테이블코인의 경쟁력을 확보하기 위한 방안과 마브렉스의 사업 전략을 소개할...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">digitaltoday.co.kr</span></div>
+      <a class="item-title" href="https://www.digitaltoday.co.kr/news/articleView.html?idxno=673284" target="_blank" rel="noopener">게임패스 가격 올렸다가 수백만명 이탈…엑스박스 임원 직접 인정</a>
+      <p class="item-desc">서머 게임 페스트 2026에서 2025년 10월 단행된 요금 인상 이후 불과 몇 달 만에 수백만명의 이용자가 이탈했다고 밝혔다. 이번 발언은 가격 정책 변화가 구독 서비스 이용자 기반에 직접적인 영향을 미쳤음을 공식적으로...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">이데일리</span></div>
+      <a class="item-title" href="https://www.edaily.co.kr/news/newspath.asp?newsid=04221366645480080" target="_blank" rel="noopener">네오위즈, 창사 첫 '개발자 CEO' 시대 연다…박성준 신작개발그룹장 대...</a>
+      <p class="item-desc">게임산업의 경쟁력이 결국 흥행 콘텐츠에서 비롯되는 만큼, 개발 책임자를 최고경영자 자리에 앉혀 신작 성과 창출에 승부를 건 것으로 풀이된다. 박 내정자는 네오위즈의 대표 흥행작인 ‘P의 거짓’ 개발을...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">sisajournal-e.com</span></div>
+      <a class="item-title" href="https://www.sisajournal-e.com/news/articleView.html?idxno=421602" target="_blank" rel="noopener">엔씨, 아이온·길드워로 서구권 정조준···글로벌 MMO 시장 확대</a>
+      <p class="item-desc">국내 모바일 시장에선 이용자 경쟁(PvP)과 확률형 아이템 중심 수익모델(BM)에 대한 피로감이 누적됐고, 신작 생존 경쟁이 심화되는 흐름이다. 이에 따라 국내 MMORPG 중심 게임사들도 플랫폼과 콘텐츠 구조를 바꾸며...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">it-b.co.kr</span></div>
+      <a class="item-title" href="https://www.it-b.co.kr/news/articleView.html?idxno=88553" target="_blank" rel="noopener">비엔엠큐닉스, 게이밍모니터 'CORE MG32B 280' 출시…신제품 라인업 첫 공...</a>
+      <p class="item-desc">PURE 시리즈는 사무용 및 일반 사용자 중심의 제품군으로 구성되며, CORE 시리즈는 게임 성능과 가격... 성능을 소비자가 직관적으로 이해할 수 있도록 하기 위한 전략적 리브랜딩"이라며 "CORE MG32B 280을...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">전자신문</span></div>
+      <a class="item-title" href="https://www.etnews.com/20260609000305" target="_blank" rel="noopener">국내 중소 게임사들, 엔비디아 젠슨 황 CEO에 “인앱결제 피해 해결 관심...</a>
+      <p class="item-desc">“한국 게임산업, 엔비디아 성장 파트너···글로벌 기업으로서 사회적 책임 다해야” 국내 모바일 결제 피해 중소 게임사 연합회(이하 연합회)가 최근 한국 게임산업에 감사의 뜻을 전한 엔비디아(NVIDIA)의 젠슨 황...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">전자신문</span></div>
+      <a class="item-title" href="https://www.etnews.com/20260609000299" target="_blank" rel="noopener">글로벌 향하는 K인디 게임... 콘진원, 일본·북유럽·중동해외 진출 지원...</a>
+      <p class="item-desc">노르딕게임은 북유럽 게임 산업과 글로벌 게임 시장을 연결하는 대표 행사다. 올해는 세계 3000여명의 게임 산업 관계자가 참가했다. 특히 공동관 참가 기업 가운데 아시아 기업은 국내 게임사가 유일해 K-게임의...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">game.dailyesports.com</span></div>
+      <a class="item-title" href="http://game.dailyesports.com/view.php?ud=20260609123345175643da15d9d2_26" target="_blank" rel="noopener">16개 한국 게임 BGM, 9월 판교에 울려 퍼진다</a>
+      <p class="item-desc">한국 게임 IP를 대표하는 16개 게임 음악이 한국 게임산업의 심장 판교 일대에 울려 퍼진다. 'GXG 2026' 운영사무국은 9일 'GXG 2026 게임음악 경연대회: The 3rd SOUND TRACK'(이하 GXG 사운드트랙) 참가자를 오는 7월19일까지 약...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">디스이즈게임</span></div>
+      <a class="item-title" href="https://www.thisisgame.com/articles/425751" target="_blank" rel="noopener">펀키스, FL-ESPORTS 8K 래피드 트리거 자석축 키보드 NX87HE / NX108HE 신규...</a>
+      <p class="item-desc">FL-CMMK 자석축을 적용해 e-스포츠 환경에서 요구되는 정밀한 브레이킹과 무빙 컨트롤을 지원한다. DKS, MT, TGL, MPT, SNAP 등 다양한 고급 입력 기능을 지원하며 키를 누를 때와 뗄 때 서로 다른 입력을 지정하거나 짧게...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">enewstoday.co.kr</span></div>
+      <a class="item-title" href="http://www.enewstoday.co.kr/news/articleView.html?idxno=2437196" target="_blank" rel="noopener">K게임, 북미 SGF 뒤흔든다···'선택과 집중' 작품 무게감 커졌다</a>
+      <p class="item-desc">업계는 올해 SGF를 통해 한국 게임 산업이 양적 확장에서 질적 확장 단계로 진입하고 있다고 평가한다. 참가 기업 수만 놓고 보면 지난해보다 축소됐지만 공개된 작품들의 규모와 기대감은 오히려 커졌다는 것이다. 특히...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">joongangenews.com</span></div>
+      <a class="item-title" href="https://www.joongangenews.com/news/articleView.html?idxno=524675" target="_blank" rel="noopener">게임 개발의 현재와 미래 한자리에...'NDC 2026' 개막 초읽기</a>
+      <p class="item-desc">또 인디게임 '림월드' 개발자와 크래프톤, 스노우플레이크 코리아 관계자 등이 참여하는 대담 세션도 마련돼 게임 산업과 기술 트렌드에 대한 다양한 시각을 제시할 예정이다. 올해 NDC는 강연뿐 아니라 다양한 체험형...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">디스이즈게임</span></div>
+      <a class="item-title" href="https://www.thisisgame.com/articles/425740" target="_blank" rel="noopener">에이수스, 컴퓨텍스 2026서 ROG 20주년 기념 하이엔드 라인업 대거 공개</a>
+      <p class="item-desc">이와 짝을 이루는 ROG Harpe II Extreme Edition 20 마우스는 e스포츠 프로 선수들과 공동 개발한 상징적인 그립 형태를 바탕으로 65K 해상도의 새로운 ROG Aimpoint Pro 센서, 1억 회의 클릭 수명을 보장하는 ROG 광학...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">전자신문</span></div>
+      <a class="item-title" href="https://www.etnews.com/20260609000278" target="_blank" rel="noopener">NDC 2026, AI·게임아트 전시까지 지식 공유의 장 열린다</a>
+      <p class="item-desc">글로벌 인디게임 '림월드' 개발진과 크래프톤, 스노우플레이크 등 업계 전문가들도 대담 세션에 참여해 게임 산업과 기술 트렌드에 대한 인사이트를 공유할 예정이다. 부대 행사도 대폭 강화했다. 넥슨은 판교...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">dt.co.kr</span></div>
+      <a class="item-title" href="https://www.dt.co.kr/article/12066630?ref=naver" target="_blank" rel="noopener">운전석 비운 펩시 트럭…자율주행 물류혁명 시작됐다</a>
+      <p class="item-desc">인간 운전자에게 적용되는 운행시간 제한 규제의 영향도 받지 않는다. 미국에서는 이미 물류 대기업과 유통... 한편 미국에서는 자율주행 차량의 안전을 규제하는 연방법이 아직 없다. 이로 인해 무인 차량을 운영하는...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">wowtv.co.kr</span></div>
+      <a class="item-title" href="https://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202606090369&t=NNv" target="_blank" rel="noopener">젠슨 황, NC·크래프톤 왜 만났나…AI PC 동맹 윤곽</a>
+      <p class="item-desc"><앵커> AI PC가 정확히 게임 산업과 어떤 관련이 있는 겁니까? <기자> 컴퓨텍스에서 공개된 'RTX Spark'가 힌트가 될 수 있습니다. RTX Spark는 엔비디아가 선보인 차세대 AI PC 플랫폼인데요. 시연 영상에서는 별도의 외장...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">전자신문</span></div>
+      <a class="item-title" href="https://www.etnews.com/20260609000270" target="_blank" rel="noopener">유니티, '유나이트 서울 2026' 세션 공개…AI·게임·산업 분야 총망라</a>
+      <p class="item-desc">게임 외 산업 분야 활용 사례도 강화했다. 삼성중공업과 한국생산기술연구원이 연사로 참여하며, 일본 자동차 기업들의 실제 HMI(인간·기계 인터페이스) 양산 사례와 기술 노하우를 소개한다. 현장에서는 역대 최대...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">게임포커스</span></div>
+      <a class="item-title" href="https://gamefocus.co.kr/detail.php?number=176486" target="_blank" rel="noopener">웹젠 '뮤 온라인', '망각의 라클리온'에 상위 유저들 위한 정예존 추가</a>
+      <p class="item-desc">라이노는 일반과 희귀 등급으로 구분되어 있으며, 라이노의 인장을 통해 제작할 수 있다. 지난 업데이트를... 게임 회원들은 정예존에서 사냥을 통해 조화의 보석과 우리엘의 깃털 등의 고급 보상을 획득할 수 있다. 7월...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">netongs.com</span></div>
+      <a class="item-title" href="http://www.netongs.com/news/articleView.html?idxno=333424" target="_blank" rel="noopener">전남 장애학생들, e스포츠 무대서 '열띤 경쟁'</a>
+      <p class="item-desc">▲'2026 전국 장애학생 e페스티벌 전남예선'에 참가한 학생들이 광주 e스포츠 경기장에서 정보경진대회와 e스포츠대회에 참여하고 있다. ⓒ전라남도교육청 전라남도교육청은 9일 광주 e스포츠 경기장에서 '2026 전국...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">asiatoday.co.kr</span></div>
+      <a class="item-title" href="https://www.asiatoday.co.kr/kn/view.php?key=20260609010003008" target="_blank" rel="noopener">K-방산 산·한·연·군 거대지성 한 자리에…‘2026 종합학술대회’ 개최</a>
+      <p class="item-desc">이들은 인공지능 기반의 지휘통제체계 구축과 민간 첨단 기술의 국방 전용(Spin-on)을 위한 과감한 규제 혁파... 군사과학기술의 '게임 체인저'로 도약하는 계기가 될 것"이라며, "산·학·연·군이 머리를 맞대고...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">gukjenews.com</span></div>
+      <a class="item-title" href="https://www.gukjenews.com/news/articleView.html?idxno=3603684" target="_blank" rel="noopener">공공캐릭터·기능성게임 한자리에…10월 대전콘텐츠페어 개최</a>
+      <p class="item-desc">올해 처음 선보이는 '대한민국 기능성게임 경진대회'에서는 지역 대학과 게임업계가 참여해 교육, 헬스케어, 국방 등 다양한 분야의 기능성 게임을 선보이고, e스포츠 대회도 함께 열린다. 한편, 행사 기간...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">financialpost.co.kr</span></div>
+      <a class="item-title" href="https://www.financialpost.co.kr/news/articleView.html?idxno=261863" target="_blank" rel="noopener">"잔몽의 나비 회피 70%와 쌍둥이 연계 스킬"…에픽세븐, '리안나 루시엘...</a>
+      <p class="item-desc">" 스마일게이트가 슈퍼크리에이티브에서 개발한 모바일 턴제 전략 역할수행게임(RPG) '에픽세븐'이 신규 영웅... 5성 등급의 암속성 도적 클래스로 쌍둥이라는 설정에 맞게 전투에서도 교체해 플레이가 가능한 최초의...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">경향신문</span></div>
+      <a class="item-title" href="https://www.khan.co.kr/article/202606091357001" target="_blank" rel="noopener">김택진·젠슨 황 ‘PC방 회동’이 보여준 25년간의 기술 동맹</a>
+      <p class="item-desc">9일 방한 일정을 마치고 한국을 떠난 황 CEO는 3박4일간의 일정에서 PC방을 세 차례나 찾으며 게임 산업에 대한 각별한 애정을 드러냈다. 김 대표와의 PC방 회동 일정을 통해 25년에 걸친 기술 동맹 파트너십을...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">cnbnews.com</span></div>
+      <a class="item-title" href="https://www.cnbnews.com/news/articleView.html?idxno=1004002" target="_blank" rel="noopener">중진공, 윤리·인권경영의 날 개최…청렴 문화 전파</a>
+      <p class="item-desc">또한 '청렴 골든벨 퀴즈대회'와 '청렴 아케이드' 등 임직원 참여형 게임 프로그램을 통해 윤리적 딜레마... 글로벌 규제 흐름에 따라 기후변화 등 환경 이슈를 준법 가이드라인에 새로 반영했다. 또한 '청렴과 공정으로...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">daily.hankooki.com</span></div>
+      <a class="item-title" href="https://daily.hankooki.com/news/articleView.html?idxno=1374720" target="_blank" rel="noopener">[유통레이더] 현대홈쇼핑, 쿠팡, CJ올리브영, 하이트진로, 롯데면세점, ...</a>
+      <p class="item-desc">스포츠 펍 'MJ23 스포츠 바 앤 그릴'은 세트 메뉴와 칵테일을 선보이고, 초 맞추기 게임과 SNS 인증샷... 오는 7월까지 매일 오전 10시 전 등급 회원에게 온라인몰 올리브 멤버스 이벤트 페이지에서 온라인 강의 플랫폼...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">veritas-a.com</span></div>
+      <a class="item-title" href="https://www.veritas-a.com/news/articleView.html?idxno=614071" target="_blank" rel="noopener">서일대 '신산업분야 특화 선도 전문대학 지원사업 2.0' 연차평가.. 2년연...</a>
+      <p class="item-desc">0(1유형)' 2차년도 연차평가에서 최고 등급인 'A등급'을 획득하는 성과를 거뒀다고 9일 밝혔다. 서일대는... 0을 통해 국가 및 산업에서 요구하는 AI&게임 융합 고숙련 인재를 양성하고, 지자체 및 산업체 등과...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">머니투데이</span></div>
+      <a class="item-title" href="https://www.mt.co.kr/society/2026/06/09/2026060910522732977" target="_blank" rel="noopener">"게임 사랑하는 사람, 즐거웠다"…페이커, 젠슨 황 만난 소감</a>
+      <p class="item-desc">이전에도 한국 게임 시장에 대한 남다른 관심을 표현해 왔다. 과거 엔비디아 행사에서는 "한국 PC방 문화와 e스포츠가 없었다면 오늘날의 엔비디아도 없었을 것"이라며 한국 게임 산업의 영향력을 높이 평가한 바 있다.</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">seoultimes.news</span></div>
+      <a class="item-title" href="https://www.seoultimes.news/news/article.html?no=2000096415" target="_blank" rel="noopener">NDC 2026 개막 임박…AI·라이브게임 해법 한자리에 모인다</a>
+      <p class="item-desc">올해 NDC는 기술 발표를 넘어 개발 현장의 경험과 시행착오, 그리고 게임 산업의 미래를 논의하는 무대로 꾸며진다. 넥슨은 오는 16일부터 열리는 ‘2026 넥슨 개발자 콘퍼런스(NDC 2026)’를 통해 게임 개발과 라이브 서비스...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">nc.press</span></div>
+      <a class="item-title" href="https://www.nc.press/news/articleView.html?idxno=617584" target="_blank" rel="noopener">35개국 홀린 K-애니 '구제역에서 살아 돌아온 돼지'...한국 청불, 일본 ...</a>
+      <p class="item-desc">시리즈, 게임 '원신'으로 대중에게 목소리를 알린 최정상 성우 남도형의 연기가 더해져 스크린을 압도한다.... 국내와 일본의 관람 등급 차이 역시 흥미로운 관전 포인트다. 그로테스크하고 도발적인 세계관과 압도적인...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">news.unn.net</span></div>
+      <a class="item-title" href="https://news.unn.net/news/articleView.html?idxno=593230" target="_blank" rel="noopener">서일대, 신산업분야 특화 선도 전문대학 지원사업 연차평가 최우수 'A등...</a>
+      <p class="item-desc">AI게임융합학과 산업체 현장 견학 기념촬영. 사진제공=서일대  서일대학교(총장 오선)는 최근 교육부와 한국연구재단이 주관한 '신산업분야 특화 선도전문대학 지원사업 2.0(1유형)' 2차년도 연차평가에서 최고 등급인...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">pinpointnews.co.kr</span></div>
+      <a class="item-title" href="https://www.pinpointnews.co.kr/news/articleView.html?idxno=458705" target="_blank" rel="noopener">"가짜 뉴·동영상 꼼짝마"…딥페이크 방지株 M83 아이씨티케이 한빛소프...</a>
+      <p class="item-desc">이번 상승세는 글로벌 주요 선거를 앞두고 가짜 뉴스의 확산을 막기 위한 규제적 움직임과 기업들의 디지털... 게임 및 콘텐츠 개발사 한빛소프트도 영상 변조 인지 및 블록체인 기반 데이터 인증 관련 기술력 수혜 기대감...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">view.asiae.co.kr</span></div>
+      <a class="item-title" href="https://view.asiae.co.kr/article/2026060911454982668" target="_blank" rel="noopener">"e스포츠엔 장애물 없다"…'장애학생 e페스티벌' 전남 예선 성료</a>
+      <p class="item-desc">전남도교육청은 9일 광주 e스포츠 경기장에서 특수교육 대상 학생들의 디지털 역량 강화와 사회적 소통... 대회는 크게 정보경진대회와 e스포츠대회 두 분야로 나눠 진행됐으며, 전남 지역 특수학교 및 일반학교 특수학급...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">businesspost.co.kr</span></div>
+      <a class="item-title" href="https://www.businesspost.co.kr/BP?command=article_view&num=439571" target="_blank" rel="noopener">[배종찬 빅데이터 분석] '젠슨황 매직', AI데이터센터와 피지컬AI</a>
+      <p class="item-desc">글로벌 최고 가치 기업의 CEO임에도 불구하고 한국의 독특한 IT 문화 공간인 PC방을 기습 방문하거나, 전설적 e스포츠 선수 '페이커'(본명 이상혁)와의 만남을 가지는 등 대중적 문화 아이콘으로서 소비되는 여러 '장면...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">welfarenews.net</span></div>
+      <a class="item-title" href="https://www.welfarenews.net/news/articleView.html?idxno=207490" target="_blank" rel="noopener">특수교육대상학생 디지털 역량 키운다</a>
+      <p class="item-desc">e스포츠대회는 닌텐도 스위치 배구, 모두의 마블, 팀파이트 택틱스, FC온라인, 폴가이즈, 닌텐도 스위치 저스트댄스 등 6개 종목으로 진행된다. 정보경진대회는 아래한글(ITQ), 동영상 제작, 스마트 검색, SW 코딩...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">tokenpost.kr</span></div>
+      <a class="item-title" href="https://www.tokenpost.kr/news/blockchain/367352" target="_blank" rel="noopener">앱테크 코퀴즈, 코넛코인 소각 500만개 돌파…사용이 곧 소각인 ‘Omni-B...</a>
+      <p class="item-desc">쿠키 구매 역시 931건·약 214만 개를 기록하며 앱 내 코넛코인 결제가 활발히 이루어지고 있음을 보여줬고... 인앱 아이템과 기능의 구매량에 비례해 소각이 지속적으로 발생하며, 생태계 이용이 활발해질수록 총...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">newspim.com</span></div>
+      <a class="item-title" href="https://www.newspim.com/news/view/20260609000733" target="_blank" rel="noopener">[젠슨 황 방한 결산] 용산 누빈 시절 잊지 않은 젠슨 황, K-게임과 AI 동...</a>
+      <p class="item-desc">[사진= 엔씨] ◆ "지포스는 한국 e스포츠와 성장"...용산 시절 잊지 않은 젠슨 황 이번 게임업계와의... 이 자리에서 황 CEO는 한국 e스포츠에 대한 애정을 표현했다. 황 CEO는 "이곳에 오게 돼 정말 기쁘다. 한국은...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">ppss.kr</span></div>
+      <a class="item-title" href="https://www.ppss.kr/news/articleView.html?idxno=298231" target="_blank" rel="noopener">젠슨 황, 엔씨 김택진 회동...아이온2 직접 체험·AI 협력 확대</a>
+      <p class="item-desc">e스포츠는 함께 성장해 왔다"라고 말했다. 이날 엔씨는 김남준 개발 PD, 소인섭 사업실장 등 '아이온2... 황 CEO는 지난 5일 방한 첫 일정으로 서울 마포구의 한 PC방을 찾아 리그 오브 레전드(LoL) e스포츠팀 T1 선수단을...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">fomos.kr</span></div>
+      <a class="item-title" href="https://www.fomos.kr/redirect/news_view?news_cate_id=2&entry_id=153681" target="_blank" rel="noopener">뮤 온라인, 가디언 '라이노'와 사냥터 업데이트</a>
+      <p class="item-desc">라이노는 일반과 희귀 등급으로 구분되며, '라이노의 인장'을 통해 제작할 수 있다. 또한 지난 업데이트에서... 게임 이용 시간에 따라 보상을 받는 '플레이타임 룰렛'을 비롯해 단계별 보상을 얻을 수 있는 '고블린 포인트...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">조선일보</span></div>
+      <a class="item-title" href="https://www.sportschosun.com/entertainment/2026-06-09/202606090100055790003473" target="_blank" rel="noopener">장수 MMORPG '뮤 온라인', 신규 가디언 '라이노' 출시</a>
+      <p class="item-desc">새롭게 추가된 라이노는 일반 등급과 희귀 등급으로 구분되며, 이용자는 '라이노의 인장'을 통해 제작할 수... 게임 플레이 이용시간에 따라 보상을 획득할 수 있는 플레이타임 룰렛을 비롯해 단계적으로 고급 보상을 얻을...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">techm.kr</span></div>
+      <a class="item-title" href="https://www.techm.kr/news/articleView.html?idxno=152467" target="_blank" rel="noopener">셧다운제 폐지됐는데 낡은 규제는 그대로...게임업계 "미성년자 본인인...</a>
+      <p class="item-desc">청소년 보호와 개인정보 보호라는 두가지 이해관계가 얽혀있는 가운데, 게임법 체계가 시대 변화를 따라가지 못한다는 지적이다. 업계에서는 게임법 전면 개정을 통해 온라인게임 본인인증과 법적대리인 동의 제도를...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">매일경제</span></div>
+      <a class="item-title" href="https://www.mk.co.kr/article/12069275" target="_blank" rel="noopener">[콘텐츠 핫&뉴] ‘뮤 온라인’, 탈 것 8차 가디언 선</a>
+      <p class="item-desc">업데이트된 라이노는 일반과 희귀 등급이 있다. 신규 지역 ‘망각의 라클리온’에 정예존도 추가된다. 정예존에 소환되는 몬스터는 속성에 따른 디버프 스킬을 보유하고 있다. 게임 회원들은 정예존에서 사냥을 통해...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">ilovepc.co.kr</span></div>
+      <a class="item-title" href="https://www.ilovepc.co.kr/news/articleView.html?idxno=59626" target="_blank" rel="noopener">[컴퓨텍스 2026] 컴퓨텍스 2026 취재를 함께 한 IT 제품들</a>
+      <p class="item-desc">블랙과 화이트 컬러 두 종을 선택할 수 있는 모델이고 IPX6 등급이 가능하기에 가벼운 물 분사에도... PAW3395 센서를 품었고 8000Hz 폴링레이트를 지원하기에 단순 사무용 외에 게임용도로도 빛을 발휘하는...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">gamevu.co.kr</span></div>
+      <a class="item-title" href="https://www.gamevu.co.kr/news/articleView.html?idxno=58543" target="_blank" rel="noopener">크래프톤 'NO LAW', 당신의 선택이 도시의 운명을 바꾼다</a>
+      <p class="item-desc">세계관과 게임의 세부 특징을 공개했다. 1인칭 오픈월드 슈터로의 등장을 예고한 게임은 유저들의 기대감을... 완전히 규제되지 않은 도시다. 법이 없는 무법지대이지만 완전히 무정부 상태인 것은 아니며, 거대 권력의...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">4th.kr</span></div>
+      <a class="item-title" href="http://www.4th.kr/news/articleView.html?idxno=2112910" target="_blank" rel="noopener">[산업소식] 현대엘리베이터 '중처법 준수 인증' A등급 획득</a>
+      <p class="item-desc">2026.6.9./사진=현대엘리베이터 현대엘리베이터,'중대재해처벌법 준수 인증'A등급 획득 현대엘리베이터는... (다중접속역할수행게임) '나이트 크로우'의 개발자 Q&A 영상 콘텐츠 '크로우 톡톡' 3화를 9일 공개했다....</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">newsworker.co.kr</span></div>
+      <a class="item-title" href="http://www.newsworker.co.kr/news/articleView.html?idxno=430327" target="_blank" rel="noopener">전남교육청, '장애학생 e페스티벌' 예선 열기</a>
+      <p class="item-desc">e스포츠 경기장에서 '2026 전국 장애학생 e페스티벌' 전남 예선전을 열었다. 디지털 체험과 경연을 통해 장애학생의 자신감과 소통 역량을 키우는 무대로 마련됐다. 이번 예선은 정보경진대회와 e스포츠대회로 나눠...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">tokenpost.kr</span></div>
+      <a class="item-title" href="https://www.tokenpost.kr/news/cryptocurrency/367316" target="_blank" rel="noopener">[코인 갱신 일지] PRIME 신고점 경신 속 BFC·EDGE 신저점 추락</a>
+      <p class="item-desc">율도이스포츠(ESPORTS) 현재가 0.07349달러 ATH -90.9%｜ATL +120.9% ② 오디에라(BEAT) 현재가 4.37달러 ATH... 31% 오디에라는 ATL 대비 4971% 상승하며 가장 강한 회복세를 보였고, 알로라와 욜도 이스포츠 역시...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">businessplus.kr</span></div>
+      <a class="item-title" href="https://www.businessplus.kr/news/articleView.html?idxno=112686" target="_blank" rel="noopener">[이슈+]"AI 시대의 록스타"… 젠슨 황에게 열광하는 이유</a>
+      <p class="item-desc">그는 "한국 게임업계가 엔비디아 지포스를 빅뱅으로 만들었다"며 "한국은 e스포츠의 발상지이자 뛰어난... AI 반도체 기업 수장이 방한 첫 행보로 게임과 e스포츠 현장을 택한 것 자체가 젊은 세대와 직접 교감하려는...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">게임포커스</span></div>
+      <a class="item-title" href="https://gamefocus.co.kr/detail.php?number=176483" target="_blank" rel="noopener">에이수스 '컴퓨텍스 2026'서 ROG 20주년 기념 노하우 담은 하이엔드 라인...</a>
+      <p class="item-desc">이와 짝을 이루는 ‘ROG Harpe II Extreme Edition 20’ 마우스는 e스포츠 프로 선수들과 공동 개발한 상징적인 그립 형태를 바탕으로 65K 해상도의 새로운 ROG Aimpoint Pro 센서, 1억 회의 클릭 수명을 보장하는 ROG...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">dailysmart.co.kr</span></div>
+      <a class="item-title" href="http://www.dailysmart.co.kr/news/articleView.html?idxno=125267" target="_blank" rel="noopener">"폐지 줍는 노인 문제, 감성 대신 '돈 버는 복지'로 푼다"… 서울사이버...</a>
+      <p class="item-desc">보드게임 '동네한바퀴', 굿즈 '웃으면서 살아' 등으로 승화시켰다. 단순한 동정표 구걸이 아닌 자본시장에서... 여기에 교육부 인증 최고 평가 3회 연속 A등급 획득, 교육부 원격대학 교육혁신 지원사업 2회 연속 선정 등...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">디스이즈게임</span></div>
+      <a class="item-title" href="https://www.thisisgame.com/articles/425714" target="_blank" rel="noopener">웹젠, 뮤 온라인 신규 가디언 라이노 출시</a>
+      <p class="item-desc">라이노는 일반과 희귀 등급으로 구분되어 있으며, 라이노의 인장을 통해 제작할 수 있다. 지난 업데이트를... 게임 회원들은 정예존에서 사냥을 통해 조화의 보석과 우리엘의 깃털 등의 고급 보상을 획득할 수 있다. 7월...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">sisunnews.co.kr</span></div>
+      <a class="item-title" href="http://www.sisunnews.co.kr/news/articleView.html?idxno=240138" target="_blank" rel="noopener">[카드뉴스] 전설들의 '라스트 댄스'...미리 보는 북중미 월드컵 역대급...</a>
+      <p class="item-desc">사상 최초 48개국 체제와 복잡해진 '확률게임' 이번 대회는 미국·캐나다·멕시코 3개국이 공동 개최할 뿐만... 안전 우려 치안과 이민 규제 등 안전 우려도 제기된다. 미국은 트럼프 행정부의 엄격한 입국 제한 정책으로...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">inews24.com</span></div>
+      <a class="item-title" href="http://www.inews24.com/view/1974970" target="_blank" rel="noopener">스타벅스, 새 대표 체제 시험대…소비 돌아왔지만 '탱크' 잔상 여전</a>
+      <p class="item-desc">다만 해당수치는 국내 신용·체크카드 결제 추정액으로 법인 계좌이체와 현금, 상품권, 간편결제, 인앱 결제 등을 통한 결제금액은 포함되지 않는다. 선불카드 환불도 부담요인으로 남아 있다. 스타벅스는 지난 1일부터...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">dealsite.co.kr</span></div>
+      <a class="item-title" href="https://dealsite.co.kr/articles/163230" target="_blank" rel="noopener">[오늘의 게임·IT 소식] 코퀴즈, 코넛코인 소각 500만개 돌파 外</a>
+      <p class="item-desc">게임의 핵심 토큰인 'CEC 토큰'은 배틀패스 보상 아이템과 게임 플레이를 통해 얻을 수 있는 재화를... 국내에서도 규제에 부합하는 안전한 기관용 정산 인프라 준비가 시장의 핵심 과제로 떠오르고 있다. 양사는...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">ytn.co.kr</span></div>
+      <a class="item-title" href="https://www.ytn.co.kr/_ln/0102_202606091105047221" target="_blank" rel="noopener">"슬픈 예감은 한번도 틀린 적이 없었다" 李 더쎈 부동산정책 예고에 한...</a>
+      <p class="item-desc">근데 정비 사업에 대한 규제는 그대로 다 남아 있거든요. 어떻게 이해를 하시면 되냐면 자동차 타보시잖아요. 엑셀이랑 브레이크를 동시에 밟아보신 적 있으세요? ◆ 조태현 : 해본 적은 없는데 게임 같은 데서 그렇게 하면...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">gamevu.co.kr</span></div>
+      <a class="item-title" href="https://www.gamevu.co.kr/news/articleView.html?idxno=58542" target="_blank" rel="noopener">'시리 AI' 공개한 애플, 새 아이폰-스마트 안경-게임은 패스</a>
+      <p class="item-desc">하지만 시장의 높은 기대에도 불구하고 유럽과 중국 시장에서의 규제 문제로 인한 도입 지연, 그리고 스마트 안경 등 신규 폼팩터 및 게임 관련 발표의 부재는 애플이 향후 해결해야 할 뚜렷한 한계점과 과제로...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">cctoday.co.kr</span></div>
+      <a class="item-title" href="https://www.cctoday.co.kr/news/articleView.html?idxno=2231328" target="_blank" rel="noopener">전기차 주행거리 늘리고 급속충전까지…배터리 제조 '게임 체인저' 등장</a>
+      <p class="item-desc">그러나 불소계 소재라는 특성상 환경 규제 이슈에서 자유롭지 못하고 음극 환경에서 배터리 성능을 저하시킬 수 있다는 기술적 단점이 꾸준히 제기돼 왔다.연구팀은 상용 습식전극 공정에서 이미 검증된 CMC-SBR...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">impacton.net</span></div>
+      <a class="item-title" href="http://www.impacton.net/news/articleView.html?idxno=19152" target="_blank" rel="noopener">일본 주총 덮친 행동주의…올해 주주제안 139건, 경영진 퇴진 요구도 급...</a>
+      <p class="item-desc">오아시스는 교세라 외에도 출판·게임회사 가도카와(TYO: 9468), 도쿄제철(TYO: 5423), 리크루팅 기업 SMS(TYO: 2175)... 규제 완화와 거래소 압박 속 일본 국내 자산운용사도 가세 시장의 분위기가 바뀌면서 그동안 경영진의...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">view.asiae.co.kr</span></div>
+      <a class="item-title" href="https://view.asiae.co.kr/article/2026060910004391348" target="_blank" rel="noopener">"축구 보고 게임 하고"…넷플·넥슨 월드컵 특수 기대</a>
+      <p class="item-desc">유료 구독자면 누구나 인앱 결제, 광고 없이 즐길 수 있다. '종합 엔터테인먼트 플랫폼'으로 체질 개선 중인 넷플릭스가 피파와 파트너십을 맺고 월드컵 시즌에 축구 게임을 선보이는 것은 구독자 락인 효과를 위한...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">weeklytoday.com</span></div>
+      <a class="item-title" href="http://www.weeklytoday.com/news/articleView.html?idxno=778933" target="_blank" rel="noopener">[금융권 소식] KB국민은행ㆍ우리은행ㆍ새마을금고재단(6.9)</a>
+      <p class="item-desc">'모아요', '즐겨요', '밀리터리클럽' 등 게임형 미션과 혜택형 콘텐츠를 결합한 것이 특징이다. 이번... 우리은행은 까다로운 현지 규제 심사를 통과하며 독자적인 외환·파생상품 운용과 영업 역량을 공식적으로...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">ezyeconomy.com</span></div>
+      <a class="item-title" href="https://www.ezyeconomy.com/news/articleView.html?idxno=236121" target="_blank" rel="noopener">코퀴즈, 코넛코인 소각 500만개 돌파…실사용 기반 토큰 경제 구축</a>
+      <p class="item-desc">NFT 발행과 인앱 결제, 거래 수수료 등 실사용 과정에서 자연스럽게 소각이 이뤄지는 구조를 통해 생태계 활성화, 토큰 가치 제고를 이뤄내는 모습이다. 코넛코인 발행사인 ㈜대체불가능회사는 코넛코인의 누적...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">게임포커스</span></div>
+      <a class="item-title" href="https://gamefocus.co.kr/detail.php?number=176444" target="_blank" rel="noopener">게임물관리위원회 '확률형 아이템 피해구제센터' 출범... 김진석 본부장...</a>
+      <p class="item-desc">국내 게임 산업의 패러다임을 바꾼 게임산업진흥에 관한 법률 개정안이 본격 시행된 가운데 게임물관리위원회가 게임사의 위법 행위를 감시하고 이용자의 권익을 보호하기 위한 전담 기구인 ‘확률형 아이템...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">aitimes.kr</span></div>
+      <a class="item-title" href="https://www.aitimes.kr/news/articleView.html?idxno=40394" target="_blank" rel="noopener">재탄생한 애플의 AI 비서, '시리 AI' 전격 공개…차세대 애플 인텔리전...</a>
+      <p class="item-desc">새로운 스크린 타임(Screen Time) 기능은 엔터테인먼트, 게임, 소셜미디어 앱에 대해 하루 총 사용 시간을... 다만 중국에서는 규제 문제로 인해 애플 인텔리전스와 시리 AI가 제공되지 않는다. 유럽연합(EU) 역시...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">한국경제</span></div>
+      <a class="item-title" href="https://www.hankyung.com/article/202606050411O" target="_blank" rel="noopener">법원경매 투자, 매각물건명세서를 모르면 입찰하지 마세요 [한경부동산...</a>
+      <p class="item-desc">이행강제금, 인허가 제한, 금융규제 등의 부담이 뒤따를 수 있으며 그 책임은 낙찰자가 부담하게 됩니다.... 경매는 싸게 사는 게임이 아닙니다. 위험을 먼저 찾는 게임입니다. 낙찰가가 저렴해 보인다고 바로 입찰표부터...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">g-enews.com</span></div>
+      <a class="item-title" href="https://www.g-enews.com/view.php?ud=2026060907262166290c8c1c064d_1" target="_blank" rel="noopener">中 ‘5개년 계획’의 그늘… 美 제조업 공장, 일자리·투자 빼앗겼다</a>
+      <p class="item-desc">통상 규제 압박을 우회했다. 심지어 일부 기업들은 중국 본토 가치사슬 안으로 직접 진입해 베이징 정부가... 차원의 게임이 될 것이라고 강력히 경고했다. 중국이 이미 미국에 필적하는 거대 경제 대국으로 성장했기...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">thefirstmedia.net</span></div>
+      <a class="item-title" href="http://www.thefirstmedia.net/news/articleView.html?idxno=200745" target="_blank" rel="noopener">"게임 아이템도 스테이블코인으로 거래" …헥토월렛원, 다자 업무 협약...</a>
+      <p class="item-desc">국내 게임 아이템 거래 시장이 스테이블코인 기반 결제를 위한 포석 마련에 나선다. 최근 각국 정부와... 이번 협약에서 헥토월렛원은 기업용 인앱 지갑인 '오하이(O-HI) 월렛'을 제공한다. 가상자산사업자(VASP) 라이선스를...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">news1.kr</span></div>
+      <a class="item-title" href="https://www.news1.kr/finance/blockchain-fintech/6190580" target="_blank" rel="noopener">헥토월렛원, 오버테이크·아이템베이·수이와 '맞손'…스테이블코인 결...</a>
+      <p class="item-desc">4개 기업은 스테이블코인 결제 개념검증(Poc)에 나선다. 스테이블코인 제도화 시대에 대비해 실제 결제... 오하이월렛은 고객사의 기존 서비스 내에 웹뷰 형태로 구현되는 기업용 인앱 지갑이다. 가상자산사업자(VASP)...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">khgames.co.kr</span></div>
+      <a class="item-title" href="https://www.khgames.co.kr/news/articleView.html?idxno=305146" target="_blank" rel="noopener">구글애플 인앱결제 수수료 피해게임사연대, '젠슨 황'에게 도움 요청 '눈...</a>
+      <p class="item-desc">국내 모바일 결제 피해 중소 게임사 연합회는 최근 한국 게임산업에 대한 감사의 뜻을 밝힌 엔비디아(NVIDIA) 젠슨 황 최고경영자(CEO)를 향해 구글과 애플의 인앱결제 강제 정책으로 인한 피해 문제에 관심을 가져 달라고...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">g-enews.com</span></div>
+      <a class="item-title" href="https://www.g-enews.com/view.php?ud=202606081357446666c5fa75ef86_1" target="_blank" rel="noopener">[위클리 게임] 이환, '라크리모사' 앞세워 구글 매출 6위로 '급상승'</a>
+      <p class="item-desc">국내 게임법에 의해 매월 과금액이 한정된 웹보드게임의 특성 상 월초에 결제 매출이 몰린 것으로 같은 기간 네오위즈의 '피망 포커' 또한 1일 기준 매출 60위에서, 8일 기준 23위로 순위가 크게 상승했다. 중국산...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">매일경제</span></div>
+      <a class="item-title" href="https://www.mk.co.kr/article/12068392" target="_blank" rel="noopener">출범 100일 확률형 아이템 피해구제센터 “생태계 신뢰 회복 ‘목표’”</a>
+      <p class="item-desc">지난 2월 27일 개소한 게임물관리위원회 산하 ‘확률형 아이템 피해구제센터’가 출범 100일을 맞았다. 게임위는 센터를 통해 게임 이용자와 게임 사업자 간 소통의 가교 역할을 하며 생태계의 신뢰를 되찾겠다는 목표를...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">ZDNet Korea</span></div>
+      <a class="item-title" href="https://zdnet.co.kr/view/?no=20260608141815" target="_blank" rel="noopener">게임물관리위원회, '확률형 아이템 피해구제센터' 출범 3개월 성과는?</a>
+      <p class="item-desc">게임물관리위원회(이하 게임위)가 지난 2월 신설한 '확률형 아이템 피해구제센터(이하 피해구제센터)' 운영 현황과 향후 로드맵을 공개했다. 게임위는 지난 5일 한국게임기자클럽 주최로 열린 간담회를 통해...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">newsway.co.kr</span></div>
+      <a class="item-title" href="https://www.newsway.co.kr/news/view?ud=2026060814185970933" target="_blank" rel="noopener">헥토월렛원, 오버테이크-아이템베이-수이와 스테이블코인 사업 협력</a>
+      <p class="item-desc">이들은 안전한 블록체인 결제 환경을 표준화하기 위한 스테이블코인 결제 기술 검증(Poc)에 나선다. 이번... 오하이월렛은 고객사의 기존 앱, 서비스 내에 웹뷰 형태로 구현되는 기업용 인앱 월렛이다. 가상자산사업자...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">game.dailyesports.com</span></div>
+      <a class="item-title" href="http://game.dailyesports.com/view.php?ud=20260605190312768943da15d9d2_26" target="_blank" rel="noopener">게임위 "피해구제센터, 내년 본격 가동…절차 표준화 준비 중"</a>
+      <p class="item-desc">이 행사는 확률형아이템 피해구제 센터의 운영 현황과 오는 2028년까지 이어지는 운영 계획 및 구체적인 사례를 소개하는 자리로 진행됐다. 현장에는 게임위 윤종원 경영지원본부장, 김진석 이용자보호본부장, 박우석...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">khgames.co.kr</span></div>
+      <a class="item-title" href="https://www.khgames.co.kr/news/articleView.html?idxno=305139" target="_blank" rel="noopener">[간담회] 확률형 아이템 피해구제센터, "이용자 권익 보호·게임산업 건...</a>
+      <p class="item-desc">게임물관리위원회(이하 게임위)가 지난 2월 확률형 아이템 피해구제센터(이하 피해구제센터)를 출범했다. 피해구제센터는 게임 이용자 권익 보호를 위해 힘을 쏟는 한편, 게임산업의 신뢰회복과 건강하고 지속 가능한...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">전자신문</span></div>
+      <a class="item-title" href="https://www.etnews.com/20260608000310" target="_blank" rel="noopener">게임 아이템 거래도 스테이블코인으로…헥토월렛원·아이템베이 PoC 추진</a>
+      <p class="item-desc">디지털자산 지갑 간 스테이블코인 이전으로 게임 아이템을 거래할 수 있는 결제 인프라가 마련된다.... 오하이월렛은 고객사의 기존 앱, 서비스 내에 웹뷰 형태로 구현되는 기업용 인앱 월렛이다. 가상자산사업자(VASP)...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">동아일보</span></div>
+      <a class="item-title" href="https://game.donga.com/122852/" target="_blank" rel="noopener">게임위 “확률 표기 미이행 해외게임사 12건, 삭제 조치까지 했다”</a>
+      <p class="item-desc">지난 6월 5일 서울 서대문구 충정빌딩 12층 게임물관리위원회 수도권사무소에서 게임기자클럽이 주최한 확률형 아이템 피해구제센터 공동 인터뷰가 열렸다. 이날 현장에서는 권혁우 사무국장, 윤종원 경영지원본부장...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">동아일보</span></div>
+      <a class="item-title" href="https://game.donga.com/122851/" target="_blank" rel="noopener">게임위 김진석 본부장 “‘확률형 아이템 피해구제센터’, 규제 아닌 신...</a>
+      <p class="item-desc">“확률형 아이템 제도는 사업자를 처벌하기 위한 규제가 아니라 게임산업 생태계의 신뢰를 회복하고 건강한 성장을 지원하기 위한 장치다.”이는 김진석 게임물관리위원회 이용자보호본부장이 한 말이다. 지난 5일...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">gamevu.co.kr</span></div>
+      <a class="item-title" href="https://www.gamevu.co.kr/news/articleView.html?idxno=58496" target="_blank" rel="noopener">[현장] 게임위, "게임 생태계 위해 처벌보다 합의-신뢰 회복 우선"</a>
+      <p class="item-desc">게임물관리위원회(이하 게임위)가 확률형 아이템 규제 및 이용자 피해 구제를 위한 본격적인 행보에 나서고 있다. 지난 5일 서울 충정로에 위치한 게임위 서울 사무소에서는 확률형 아이템 피해구제센터의 현황과 향후...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">inews24.com</span></div>
+      <a class="item-title" href="http://www.inews24.com/view/1974316" target="_blank" rel="noopener">'출범 3개월' 게임위 확률형 피해구제센터…609건 피해 접수</a>
+      <p class="item-desc">게임물관리위원회 산하 '확률형 아이템 피해구제센터'가 출범 3개월 만에 609건의 피해 상담을 접수했다. 확률형 아이템 정보공개 제도를 이행하지 않아 국내 시장에서 퇴출된 게임은 12종에 이른 것으로 나타났다....</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">gameple.co.kr</span></div>
+      <a class="item-title" href="https://www.gameple.co.kr/news/articleView.html?idxno=215776" target="_blank" rel="noopener">게임위 "확률형 아이템 피해구제센터, 이렇게 만들었습니다"</a>
+      <p class="item-desc">게임물관리위원회 김진석 이용자보호본부장 게임물관리위원회(이하 게임위)가 '확률형 아이템 피해구제센터'를 통해 게임 이용자 권익 보호와 산업 신뢰 회복에 나선다. 게임위는 확률형 아이템 관련 분쟁을 조정해...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">조선일보</span></div>
+      <a class="item-title" href="http://woman.chosun.com/news/articleView.html?idxno=126053" target="_blank" rel="noopener">스타벅스 美 본사, 5∙18 단체에 사과… "결코 일어나선 안 될 일"</a>
+      <p class="item-desc">22억3000만원 줄어든 것으로, 2주 연속 하락세를 나타냈다. 다만 해당 수치는 국내 신용·체크카드 결제 추정액으로, 법인 계좌이체와 현금, 상품권, 간편결제, 인앱 결제 등을 통한 결제 금액은 포함되지 않는다.</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">news.tf.co.kr</span></div>
+      <a class="item-title" href="https://news.tf.co.kr/read/national/2330395.htm" target="_blank" rel="noopener">미국·EU는 낮추는데…구글·애플 앱마켓 수수료 한국만 30%, 왜?</a>
+      <p class="item-desc">반면, 한국은 2021년 세계 최초로 인앱결제 강제 금지법을 도입했지만 구글과 애플의 수수료 정책 변화에 실효적으로 대응하지 못하면서 제도 취지가 퇴색됐다는 지적이 나오는 상황이다. 당시 구글과 애플이 법에 맞춰...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">이데일리</span></div>
+      <a class="item-title" href="http://www.smedaily.co.kr/news/articleView.html?idxno=358306" target="_blank" rel="noopener">게임 아이템 거래도 스테이블 코인으로 헥토월렛원, 아이템베이 등과 4...</a>
+      <p class="item-desc">디지털자산 지갑(월렛) 간 스테이블코인 이전으로 게임 아이템을 거래할 수 있는 결제 인프라가 마련된다.... 오하이월렛은 고객사의 기존 앱, 서비스 내에 웹뷰 형태로 구현되는 기업용 인앱 월렛으로, 가상자산사업자...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">newspim.com</span></div>
+      <a class="item-title" href="https://www.newspim.com/news/view/20260608000365" target="_blank" rel="noopener">헥토월렛원, 4자 MOU 체결…"스테이블코인 결제 기술 검증 추진"</a>
+      <p class="item-desc">기반 결제 인프라 구축에 나선다. 8일 헥토이노베이션의 계열사인 헥토월렛원은 글로벌 웹3 마켓플레이스... [사진=헥토월렛원] 협약에 따라 헥토월렛원은 기업용 인앱(In-App) 지갑 서비스인 '오하이(O-HI) 월렛'을...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">pointdaily.co.kr</span></div>
+      <a class="item-title" href="https://www.pointdaily.co.kr/news/articleView.html?idxno=307367" target="_blank" rel="noopener">헥토월렛원, 아이템베이 등 4사와 블록체인 결제 MOU</a>
+      <p class="item-desc">자산 결제 법제화에 선제적으로 대응하기 위해 이용자 보호 체계와 규제 부합성, 실제 정산 흐름 등을 면밀히 실증할 방침이다. 협약 구조에 따라 인프라 공급을 맡은 헥토월렛원은 자사의 기업용 인앱 지갑 솔루션인...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">widedaily.com</span></div>
+      <a class="item-title" href="https://www.widedaily.com/news/articleView.html?idxno=295275" target="_blank" rel="noopener">헥토월렛원-오버테이크-아이템베이-수이, 스테이블코인 결제 MOU</a>
+      <p class="item-desc">블록체인 결제 환경을 표준화하기 위한 스테이블코인 결제 기술 검증(Poc)에 나선다고 8일 밝혔다. 회사 측에... 오하이월렛은 고객사의 기존 앱, 서비스 내에 웹뷰 형태로 구현되는 기업용 인앱 월렛으로...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">ddaily.co.kr</span></div>
+      <a class="item-title" href="https://www.ddaily.co.kr/page/view/2026060809491541642" target="_blank" rel="noopener">게임 아이템도 USDC로 거래…헥토월렛원 등 4사, 결제 인프라 PoC 착수</a>
+      <p class="item-desc">디지털자산 지갑 간 스테이블코인 이전으로 게임 아이템을 거래할 수 있는 결제 인프라가 마련된다.... 기업용 인앱 월렛인 ‘오하이(O-HI)월렛’은 아이템베이에 웹뷰 형태로 공급한다. 아이템베이는 대규모 거래...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">digitaltoday.co.kr</span></div>
+      <a class="item-title" href="https://www.digitaltoday.co.kr/news/articleView.html?idxno=672676" target="_blank" rel="noopener">헥토월렛원-오버테이크-아이템베이-수이, 스테이블코인 결제 PoC 제휴</a>
+      <p class="item-desc">스테이블코인 결제 기술 검증(Poc)에 나선다고 8일 밝혔다. 4개사는 향후 본격적인 스테이블코인 결제 및... 오하이월렛은 고객사 기존 앱, 서비스 내에 웹뷰 형태로 구현되는 기업용 인앱 월렛으로, 가상자산사업자(VASP)...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">ZDNet Korea</span></div>
+      <a class="item-title" href="https://zdnet.co.kr/view/?no=20260608093352" target="_blank" rel="noopener">헥토월렛원·오버테이크·아이템베이·수이, 스테이블코인 결제 협업</a>
+      <p class="item-desc">스테이블코인 결제 기술 검증(Poc)에 나선다고 8일 밝혔다. 네 회사는 향후 디지털자산 법제화에 대비해 실제... 오하이월렛은 기존 앱과 서비스에 웹뷰 형태로 구현하는 기업용 인앱 월렛이다. 아이템베이는 오하이월렛을...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.06</span><span class="item-source">economist.co.kr</span></div>
+      <a class="item-title" href="https://economist.co.kr/article/view/ecn202606020017" target="_blank" rel="noopener">비주류 꼬리표 뗀 ‘서브컬처 게임’…K게임 새 승부수</a>
+      <p class="item-desc">서브컬처 게임은 과도한 확률형 아이템이나 무한 경쟁에 의존하는 대신 캐릭터에 대한 애정과 몰입을 기반으로 하는 ‘애정형 과금’ 구조를 취하고 있어, 유저 반발이 상대적으로 적고 IP의 수명이 장기적이라는 매력이...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.05</span><span class="item-source">khgames.co.kr</span></div>
+      <a class="item-title" href="https://www.khgames.co.kr/news/articleView.html?idxno=305065" target="_blank" rel="noopener">마피아42 개발사 팀42의 12년 만의 신작, 슬라임의 세계 플레이엑스포서...</a>
+      <p class="item-desc">나성수 대표는 확률형 아이템으로 대표되는 뽑기 시스템을 과감히 탈피하겠다며, 유저들의 편의성을 높이는 방향으로 비즈니스 모델을 구축해 수집과 합성, 탐험의 즐거움이 과금과 직결되지 않는 게임으로 개발할...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.05</span><span class="item-source">gamechosun.co.kr</span></div>
+      <a class="item-title" href="https://www.gamechosun.co.kr/webzine/article/view.php?no=222458" target="_blank" rel="noopener">팀42 신작 '슬라임의 세계' 플레이엑스포 참가 성료... 9월 PC 데모 공개...</a>
+      <p class="item-desc">나성수 대표는 발표를 통해 “확률형 아이템(가챠)으로 대표되는 뽑기 시스템을 과감히 탈피하겠다”며 “이용자들의 편의성을 높이는 방향으로 비즈니스 모델을 구축해 수집과 합성, 탐험의 즐거움이 과금과 직결되지...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.05</span><span class="item-source">디스이즈게임</span></div>
+      <a class="item-title" href="https://www.thisisgame.com/articles/425416" target="_blank" rel="noopener">팀42 신작 '슬라임의 세계' 플레이 엑스포에서 첫선, 관람객 몰리며 성...</a>
+      <p class="item-desc">나성수 대표는 발표를 통해 “확률형 아이템(가챠)으로 대표되는 뽑기 시스템을 과감히 탈피하겠다”며 “이용자들의 편의성을 높이는 방향으로 비즈니스 모델을 구축해 수집과 합성, 탐험의 즐거움이 과금과 직결되지...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.05</span><span class="item-source">pinpointnews.co.kr</span></div>
+      <a class="item-title" href="https://www.pinpointnews.co.kr/news/articleView.html?idxno=457562" target="_blank" rel="noopener">금기 깬 넷마블 '솔: 인챈트'…파격 앞세워 하반기 MMORPG 주도권 쥘까</a>
+      <p class="item-desc">그간 MMORPG 장르는 과도한 과금 유도에 대한 비판을 의식해, 확률형 아이템이나 자동사냥 등의 요소를 게임 내에서 완곡하게 표현하거나 배제하려는 경향을 보여왔다. 반면 '솔: 인챈트'는 뽑기와 거래소, 도감 컬렉션...</p>
+    </div></div>
+  </section>
+    <section class="full-section" id="section-persons">
+    <div class="full-section-header" style="--card-color:#8B5CF6;">
+      <div class="card-title-row">
+        <span class="card-emoji">👤</span>
+        <h2 class="card-title">주요인사 동향</h2>
+        <span class="card-badge" style="background:#8B5CF618;color:#8B5CF6;border:1px solid #8B5CF640;">10건</span>
+      </div>
+      <div class="tabs-bar"><button class="tab-btn active" onclick="switchTab(this,'person-wij')" data-card="persons">위정현 교수 <span class="person-cnt">10</span></button><button class="tab-btn " onclick="switchTab(this,'person-lee')" data-card="persons">이철우 변호사 <span class="person-cnt">0</span></button></div>
+    </div>
+    <div class="full-section-body" id="persons-body"><div class="tab-pane active" id="person-wij"><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">munhwa.com</span></div>
+      <a class="item-title" href="https://www.munhwa.com/article/11594341?ref=naver" target="_blank" rel="noopener">중앙대 가상융합대학, 美 텍사스대 댈러스와 ‘오버워치’ 친선경기…...</a>
+      <p class="item-desc">위정현 가상융합대학장은 “이번 친선전은 이스포츠 경기 운영을 위한 성공적인 테스트베드 구축 성과를 거두고, 양국 대학 간의 글로벌 교류 환경을 다지는 뜻깊은 발판이 됐다”고 평가했다.</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">popcornnews.net</span></div>
+      <a class="item-title" href="http://www.popcornnews.net/news/articleView.html?idxno=123334" target="_blank" rel="noopener">[POP!대학가] 고려대 연구팀, 어려운 문서도 누구나 쉽게 이해하도록 요...</a>
+      <p class="item-desc">(학장 위정현)이 미국의 명문 대학인 텍사스 대학교 달라스 캠퍼스(University of Texas at Dallas, 이하 UT Dallas)와... 위정현 중앙대학교 가상융합대학장은 "이스포츠는 대표적인 실감미디어 콘텐츠의 가능성을 지니고 있다...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">게임포커스</span></div>
+      <a class="item-title" href="https://gamefocus.co.kr/detail.php?number=176485" target="_blank" rel="noopener">중앙대 가상융합대학, 미 UT Dallas와 '오버워치' 글로벌 이스포츠 친선...</a>
+      <p class="item-desc">중앙대학교(총장 박세현) 가상융합대학(학장 위정현)이 미국의 명문 대학인 텍사스 대학교 달라스 캠퍼스... 위정현 중앙대학교 가상융합대학장은 “이스포츠는 대표적인 실감미디어 콘텐츠의 가능성을 지니고...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">디스이즈게임</span></div>
+      <a class="item-title" href="https://www.thisisgame.com/articles/425705" target="_blank" rel="noopener">중앙대 가상융합대학, 미 UT Dallas와 오버워치 글로벌 이스포츠 대학전...</a>
+      <p class="item-desc">위정현 중앙대학교 가상융합대학장은 “이스포츠는 대표적인 실감미디어 콘텐츠의 가능성을 지니고 있다”며, “이번 친선전은 이스포츠 경기 운영을 위한 성공적인 테스트베드 구축 성과를 거두고, 양국 대학 간의...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">동아일보</span></div>
+      <a class="item-title" href="https://edu.donga.com/news/articleView.html?idxno=108594" target="_blank" rel="noopener">중앙대 가상융합대학, 미 UT Dallas와 '오버워치' 글로벌 이스포츠 대학...</a>
+      <p class="item-desc">중앙대학교(총장 박세현) 가상융합대학(학장 위정현)이 미국의 명문 대학인 텍사스 대학교 달라스 캠퍼스... 위정현 중앙대학교 가상융합대학장은 "이스포츠는 대표적인 실감미디어 콘텐츠의 가능성을 지니고 있다...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">enewstoday.co.kr</span></div>
+      <a class="item-title" href="http://www.enewstoday.co.kr/news/articleView.html?idxno=2437175" target="_blank" rel="noopener">중앙대, 美 UT Dallas와 글로벌 이스포츠 친선전 개최</a>
+      <p class="item-desc">중앙대학교(총장 박세현) 가상융합대학(학장 위정현)이 "미국 명문 대학인 텍사스대학교 달라스 캠퍼스... 위정현 중앙대학교 가상융합대학장은 "이스포츠는 대표적인 실감미디어 콘텐츠로서 높은 가능성을 지니고...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.09</span><span class="item-source">financialreview.co.kr</span></div>
+      <a class="item-title" href="http://www.financialreview.co.kr/news/articleView.html?idxno=42784" target="_blank" rel="noopener">중앙대, 美 명문대와 '오버워치' 친선경기 개최…실시간 생중계</a>
+      <p class="item-desc">/사진=중앙대학교 중앙대학교(총장 박세현) 가상융합대학(학장 위정현)이 미국의 명문 대학인 텍사스... 위정현 중앙대학교 가상융합대학장은 "이스포츠는 대표적인 실감미디어 콘텐츠의 가능성을 지니고 있다"며...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">newstnt.com</span></div>
+      <a class="item-title" href="https://www.newstnt.com/news/articleView.html?idxno=705601" target="_blank" rel="noopener">중앙대·UT Dallas, '오버워치'로 손잡다…대학 간 글로벌 이스포츠 친선...</a>
+      <p class="item-desc">중앙대학교 가상융합대학(학장 위정현)은 6월 3일 미국 텍사스 대학교 달라스(UT Dallas)와 글로벌 이스포츠... 위정현 학장은 "이스포츠는 실감미디어 콘텐츠로서 교육·교류의 잠재력이 크다"며 "이번 행사는 경기 운영...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">동아일보</span></div>
+      <a class="item-title" href="https://edu.donga.com/news/articleView.html?idxno=108572" target="_blank" rel="noopener">중앙대 가상융합대학, 미 UT Dallas와 '오버워치' 글로벌 이스포츠 대학...</a>
+      <p class="item-desc">중앙대학교(총장 박세현) 가상융합대학(학장 위정현)이 지난 6월 3일 미국의 명문 대학인 텍사스 대학교... 위정현 가상융합대학장은 "이스포츠는 대표적인 실감미디어 콘텐츠의 가능성을 지니고 있다"며, "이번...</p>
+    </div><div class="news-item">
+      <div class="item-meta"><span class="item-date">06.08</span><span class="item-source">dailysmart.co.kr</span></div>
+      <a class="item-title" href="http://www.dailysmart.co.kr/news/articleView.html?idxno=125214" target="_blank" rel="noopener">한·미 대학생들 '오버워치'로 뭉쳤다… 중앙대, 미 UT Dallas와 글로벌 ...</a>
+      <p class="item-desc">위정현 중앙대 가상융합대학장은 "이스포츠는 차세대 실감미디어 콘텐츠로서 무한한 확장성과 가능성을 지니고 있다"며 "이번 친선전은 첨단 이스포츠 경기 운영을 위한 성공적인 테스트베드를 구축함과 동시에 양국...</p>
+    </div></div><div class="tab-pane " id="person-lee"><div class="empty-state">이번 주 관련 기사가 없습니다.</div></div></div>
+  </section>
+
+  </main>
+</div>
+
+<script>
+  function switchTab(btn, paneId) {
+    const card = btn.closest('.grid-card, .full-section');
+    card.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    card.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const pane = document.getElementById(paneId);
+    if (pane) pane.classList.add('active');
+  }
+  const allSections = document.querySelectorAll('.grid-card, .full-section');
+  const navItems = document.querySelectorAll('.nav-item');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navItems.forEach(n => n.classList.remove('active'));
+        const a = document.querySelector(`.nav-item[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -50% 0px' });
+  allSections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
